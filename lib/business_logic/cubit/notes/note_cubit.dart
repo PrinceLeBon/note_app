@@ -11,9 +11,9 @@ class NoteCubit extends Cubit<NoteState> {
   void addNote(Note note, List<Note> notesList) {
     try {
       emit(AddingNote());
-      final Box placeBox = Hive.box("Notes");
+      final Box notesBox = Hive.box("Notes");
       notesList.add(note);
-      placeBox.put("notesList", notesList);
+      notesBox.put("notesList", notesList);
       emit(NotesAdded());
     } catch (e) {
       emit(AddingNoteFailed(error: "Error: $e"));
