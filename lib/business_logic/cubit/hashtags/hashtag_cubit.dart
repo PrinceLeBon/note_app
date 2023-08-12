@@ -25,8 +25,8 @@ class HashtagCubit extends Cubit<HashtagState> {
       emit(GettingAllHashTags());
       final Box noteBox = Hive.box("Note");
       List<HashTag> hashTagsList =
-      List.castFrom(noteBox.get("hashTagsList", defaultValue: []))
-          .cast<HashTag>();
+          List.castFrom(noteBox.get("hashTagsList", defaultValue: []))
+              .cast<HashTag>();
       emit(HashTagsGotten(hashTags: hashTagsList));
     } catch (e) {
       emit(GettingAllHashTagsFailed(error: "Error: $e"));
