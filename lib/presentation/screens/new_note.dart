@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:note_app/presentation/widgets/custom_text_field.dart';
 import 'package:note_app/presentation/widgets/gap.dart';
+import 'package:note_app/presentation/widgets/google_text.dart';
 import 'package:note_app/presentation/widgets/show_hashtags.dart';
 import 'package:note_app/utils/constants.dart';
 import '../widgets/custom_dropdown.dart';
@@ -15,6 +17,8 @@ class NewNote extends StatefulWidget {
 class _NewNoteState extends State<NewNote> {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
+  Color currentColor = Colors.blue;
+  Color pickerColor = Colors.blue;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +59,7 @@ class _NewNoteState extends State<NewNote> {
                   const Gap(horizontalAlign: true, gap: 10),
                   InkWell(
                     onTap: () {
-                     // pickColor(context);
+                      pickColor(context);
                     },
                     child: Container(
                       padding: const EdgeInsets.all(4.0),
@@ -108,48 +112,41 @@ class _NewNoteState extends State<NewNote> {
       ),
     );
   }
-/*
+
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
+  }
+
   Future pickColor(BuildContext context) {
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Pick a color!'),
+            backgroundColor: blackColor,
+            title: const GoogleText(
+              text: "Choisissez une couleur !",
+              fontWeight: true,
+              fontSize: 20,
+            ),
             content: SingleChildScrollView(
-              /*child: ColorPicker(
+              child: MaterialPicker(
                 pickerColor: pickerColor,
                 onColorChanged: changeColor,
-              ),*/
-              // Use Material color picker:
-              //
-              /*child: MaterialPicker(
-                 pickerColor: pickerColor,
-                 onColorChanged: changeColor,
-                 //showLabel: true, // only on portrait mode
-               ),*/
-              //
-              // Use Block color picker:
-              //
-              child: BlockPicker(
-                pickerColor: currentColor,
-                onColorChanged: changeColor,
               ),
-              //
-              /*child: MultipleChoiceBlockPicker(
-                 pickerColors: currentColors,
-                 onColorsChanged: changeColors,
-               ),*/
             ),
             actions: <Widget>[
               ElevatedButton(
-                child: const Text('Got it'),
+                style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.all<Color>(blackColor)),
                 onPressed: () {
                   setState(() => currentColor = pickerColor);
                   Navigator.of(context).pop();
                 },
+                child: const GoogleText(text: "Valider"),
               ),
             ],
           );
         });
-  }*/
+  }
 }
