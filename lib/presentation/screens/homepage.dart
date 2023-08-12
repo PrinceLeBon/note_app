@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:note_app/presentation/screens/firstpage.dart';
+import 'package:note_app/presentation/screens/new_note.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
 import '../../utils/constants.dart';
 
@@ -30,7 +31,11 @@ class _MyHomePageState extends State<MyHomePage> {
       body: const FirstPage(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: whiteColor,
-        onPressed: null,
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            return const NewNote();
+          }));
+        },
         child: Icon(
           Icons.add,
           color: blackColor,

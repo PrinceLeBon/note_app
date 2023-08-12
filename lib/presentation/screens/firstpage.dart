@@ -18,10 +18,13 @@ class _FirstPageState extends State<FirstPage> {
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const GoogleText(
               text: "My Notes",
               fontSize: 50,
+              fontWeight: true,
             ),
             Container(
               height: 10,
