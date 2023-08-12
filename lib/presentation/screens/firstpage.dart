@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
 import 'package:note_app/presentation/widgets/hashtags.dart';
 import 'package:note_app/presentation/widgets/note.dart';
+import '../widgets/gap.dart';
 
 class FirstPage extends StatefulWidget {
   const FirstPage({super.key});
@@ -26,9 +26,7 @@ class _FirstPageState extends State<FirstPage> {
               fontSize: 50,
               fontWeight: true,
             ),
-            Container(
-              height: 10,
-            ),
+            const Gap(horizontalAlign: false, gap: 10),
             SizedBox(
               height: 40,
               child: ListView.builder(
@@ -40,9 +38,7 @@ class _FirstPageState extends State<FirstPage> {
                     );
                   }),
             ),
-            Container(
-              width: 10,
-            ),
+            const Gap(horizontalAlign: false, gap: 10),
             ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,

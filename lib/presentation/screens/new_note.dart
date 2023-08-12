@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:note_app/presentation/widgets/custom_text_field.dart';
-import 'package:note_app/utils/constants.dart';
+import 'package:note_app/presentation/widgets/gap.dart';
 
 class NewNote extends StatefulWidget {
   const NewNote({super.key});
@@ -18,13 +17,13 @@ class _NewNoteState extends State<NewNote> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: CircleAvatar(
-          backgroundColor: whiteColor,
-          child: Icon(
-            Icons.arrow_back_ios_new,
-            color: blackColor,
-          ),
+        leading: const Icon(
+          Icons.arrow_back_ios_new,
         ),
+        actions: const [
+          Icon(Icons.menu),
+          Gap(horizontalAlign: true, gap: 10),
+        ],
         elevation: 0,
       ),
       body: Padding(

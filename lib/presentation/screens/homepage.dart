@@ -3,6 +3,7 @@ import 'package:note_app/presentation/screens/firstpage.dart';
 import 'package:note_app/presentation/screens/new_note.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
 import '../../utils/constants.dart';
+import '../widgets/gap.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -21,11 +22,9 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         title: const GoogleText(text: "Hi, Prince Le Bon"),
         elevation: 0,
-        actions: [
-          const Icon(Icons.search),
-          Container(
-            width: 10,
-          )
+        actions: const [
+          Icon(Icons.search),
+          Gap(horizontalAlign: true, gap: 10),
         ],
       ),
       body: const FirstPage(),
