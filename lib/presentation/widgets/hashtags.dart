@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note_app/presentation/widgets/google_text.dart';
 
 class Hashtags extends StatelessWidget {
   final String label;
@@ -7,6 +8,6 @@ class Hashtags extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Chip(label: Text("# $label"));
+    return Chip(label: GoogleText(text: "# $label"));
   }
 }

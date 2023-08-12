@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note_app/presentation/widgets/google_text.dart';
 
 class Note extends StatelessWidget {
   final String title;
@@ -22,14 +23,14 @@ class Note extends StatelessWidget {
             Container(
               height: 10,
             ),
-            Text(
-              title,
-              style: const TextStyle(fontWeight: FontWeight.bold),
+            GoogleText(
+              text: title,
+              fontWeight: true,
             ),
             Container(
               height: 10,
             ),
-            Text(label),
+            GoogleText(text: label),
             Container(
               height: 10,
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:note_app/presentation/widgets/google_text.dart';
 import 'package:note_app/presentation/widgets/hashtags.dart';
 import 'package:note_app/presentation/widgets/note.dart';
 
@@ -18,9 +19,9 @@ class _FirstPageState extends State<FirstPage> {
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
-            const Text(
-              "My Notes",
-              style: TextStyle(fontSize: 50),
+            const GoogleText(
+              text: "My Notes",
+              fontSize: 50,
             ),
             Container(
               height: 10,
