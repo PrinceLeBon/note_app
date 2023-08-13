@@ -1,3 +1,4 @@
+import 'package:color_parser/color_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:note_app/presentation/widgets/custom_text_field.dart';
@@ -15,8 +16,10 @@ class NewNote extends StatefulWidget {
 }
 
 class _NewNoteState extends State<NewNote> {
+  final _formKey = GlobalKey<FormState>();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController noteController = TextEditingController();
+  final TextEditingController hashTagController = TextEditingController();
   Color currentColor = Colors.blue;
   Color pickerColor = Colors.blue;
 
@@ -124,14 +127,40 @@ class _NewNoteState extends State<NewNote> {
           return AlertDialog(
             backgroundColor: blackColor,
             title: const GoogleText(
-              text: "Choisissez une couleur !",
+              text: "Ajouter un hashtag",
               fontWeight: true,
               fontSize: 20,
             ),
             content: SingleChildScrollView(
-              child: MaterialPicker(
-                pickerColor: pickerColor,
-                onColorChanged: changeColor,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Form(
+                    key: _formKey,
+                    child: CustomTextField(
+                      controller: hashTagController,
+                      size: 15,
+                      hintText: "Nom du hashTag",
+                      letterSpacing: false,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Veuillez donner un nom au hashtag";
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  const GoogleText(
+                    text: "Choisissez une couleur !",
+                    fontWeight: true,
+                    fontSize: 15,
+                  ),
+                  const Gap(horizontalAlign: false, gap: 10),
+                  MaterialPicker(
+                    pickerColor: pickerColor,
+                    onColorChanged: changeColor,
+                  ),
+                ],
               ),
             ),
             actions: <Widget>[
@@ -140,8 +169,14 @@ class _NewNoteState extends State<NewNote> {
                     backgroundColor:
                         MaterialStateProperty.all<Color>(blackColor)),
                 onPressed: () {
-                  setState(() => currentColor = pickerColor);
-                  Navigator.of(context).pop();
+                  if (_formKey.currentState!.validate()) {
+                    setState(() => currentColor = pickerColor);
+                    hashTagController.text = "";
+                    final String color =
+                    ColorParser.color(pickerColor)
+                        .toHex();
+                    Navigator.of(context).pop();
+                  }
                 },
                 child: const GoogleText(text: "Valider"),
               ),

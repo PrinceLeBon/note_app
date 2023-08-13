@@ -7,17 +7,20 @@ class CustomTextField extends StatelessWidget {
   final double size;
   final String hintText;
   final bool letterSpacing;
+  final String? Function(String?)? validator;
 
   const CustomTextField(
       {super.key,
       required this.controller,
       required this.size,
+      this.validator,
       required this.hintText,
       required this.letterSpacing});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      validator: validator,
       keyboardType: TextInputType.multiline,
       maxLines: null,
       cursorColor: whiteColor,
