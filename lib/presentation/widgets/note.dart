@@ -16,25 +16,28 @@ class Note extends StatelessWidget {
           color: Colors.pink[200],
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              height: 10,
-            ),
-            GoogleText(
-              text: title,
-              fontWeight: true,
-            ),
-            Container(
-              height: 10,
-            ),
-            GoogleText(text: label),
-            Container(
-              height: 10,
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                height: 10,
+              ),
+              GoogleText(
+                text: title,
+                fontWeight: true,
+              ),
+              Container(
+                height: 10,
+              ),
+              GoogleText(text: label),
+              Container(
+                height: 10,
+              ),
+            ],
+          ),
         ),
       ),
     );
