@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:note_app/business_logic/cubit/hashtags/hashtag_cubit.dart';
+import 'package:note_app/business_logic/cubit/notes/note_cubit.dart';
 import 'package:note_app/data/models/hashtag.dart';
+import 'package:note_app/data/models/note.dart';
 import 'package:note_app/presentation/widgets/custom_text_field.dart';
 import 'package:note_app/presentation/widgets/gap.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
@@ -38,98 +40,155 @@ class _NewNoteState extends State<NewNote> {
             Navigator.of(context).pop();
           },
         ),
-        actions: const [
-          Icon(Icons.save),
-          Gap(horizontalAlign: true, gap: 10),
+        actions: [
+          BlocBuilder<HashtagCubit, HashtagState>(
+            builder: (context, state) {
+              return InkWell(
+                onTap: () {
+                  if (state is HashTagsGotten) {
+                    if (titleController.text.trim().isEmpty &&
+                        noteController.text.trim().isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: GoogleText(
+                              text: "Le titre et la note sont vides"),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    } else {
+                      context.read<NoteCubit>().addNote(
+                            Note(
+                                id: DateTime.now().toString(),
+                                hashtagsId: state.hashTagsFiltered
+                                    .map((hashtag) => hashtag.id)
+                                    .toList(),
+                                userId: "userId",
+                                title: titleController.text.trim(),
+                                note: noteController.text.trim(),
+                                dateOfCreation: DateTime.now()),
+                          );
+                    }
+                  }
+                },
+                hoverColor: Colors.transparent,
+                child: const Icon(Icons.save),
+              );
+            },
+          ),
+          const Gap(horizontalAlign: true, gap: 10),
         ],
         elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              CustomTextField(
-                controller: titleController,
-                size: 40,
-                hintText: "Title",
-                letterSpacing: true,
+      body: BlocListener<NoteCubit, NoteState>(
+        listener: (context, noteState) {
+          if (noteState is NotesAdded) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: GoogleText(text: "Note ajoutée"),
+                backgroundColor: Colors.green,
               ),
-              BlocBuilder<HashtagCubit, HashtagState>(
-                builder: (context, state) {
-                  return (state is HashTagsGotten)
-                      ? Column(
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: CustomDropDown(
-                                    list: state.hashTags,
-                                    listFiltered: state.hashTagsFiltered,
-                                  ),
-                                ),
-                                const Gap(horizontalAlign: true, gap: 10),
-                                InkWell(
-                                  onTap: () {
-                                    pickColor(context, state.hashTags,
-                                        state.hashTagsFiltered);
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.all(4.0),
-                                    decoration: BoxDecoration(
-                                      color: whiteColor,
-                                      shape: BoxShape.circle,
+            );
+            Navigator.of(context).pop();
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                CustomTextField(
+                  controller: titleController,
+                  size: 40,
+                  hintText: "Title",
+                  letterSpacing: true,
+                ),
+                BlocConsumer<HashtagCubit, HashtagState>(
+                  listener: (context, hashTagState) {
+                    if (hashTagState is HashTagsAdded) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: GoogleText(text: "Hashtag ajouté"),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    }
+                  },
+                  builder: (context, hashTagState) {
+                    return (hashTagState is HashTagsGotten)
+                        ? Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: CustomDropDown(
+                                      list: hashTagState.hashTags,
+                                      listFiltered:
+                                          hashTagState.hashTagsFiltered,
                                     ),
-                                    child: Icon(
-                                      Icons.add,
-                                      color: blackColor,
-                                      size: 16.0,
-                                    ),
                                   ),
-                                )
-                              ],
-                            ),
-                            ShowHashtags(
-                              hashtags: state.hashTags,
-                              hashtagsFiltered: state.hashTagsFiltered,
-                            ),
-                          ],
-                        )
-                      : (state is GettingAllHashTags)
-                          ? CircularProgressIndicator(
-                              color: whiteColor,
-                            )
-                          : (state is GettingAllHashTagsFailed)
-                              ? Row(
-                                  children: [
-                                    const Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(left: 16),
-                                        child: GoogleText(
-                                            text:
-                                                "Nous n'avons pas pu récupérer vos hashtags, veuillez rééssayer"),
+                                  const Gap(horizontalAlign: true, gap: 10),
+                                  InkWell(
+                                    onTap: () {
+                                      pickColor(context, hashTagState.hashTags,
+                                          hashTagState.hashTagsFiltered);
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(4.0),
+                                      decoration: BoxDecoration(
+                                        color: whiteColor,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(
+                                        Icons.add,
+                                        color: blackColor,
+                                        size: 16.0,
                                       ),
                                     ),
-                                    IconButton(
-                                        onPressed: () => context
-                                            .read<HashtagCubit>()
-                                            .getHashTags(),
-                                        icon: Icon(
-                                          Icons.download,
-                                          color: whiteColor,
-                                        ))
-                                  ],
-                                )
-                              : Container();
-                },
-              ),
-              CustomTextField(
-                controller: noteController,
-                size: 15,
-                hintText: "Ajouter une note",
-                letterSpacing: false,
-              ),
-            ],
+                                  )
+                                ],
+                              ),
+                              ShowHashtags(
+                                hashtags: hashTagState.hashTags,
+                                hashtagsFiltered: hashTagState.hashTagsFiltered,
+                              ),
+                            ],
+                          )
+                        : (hashTagState is GettingAllHashTags)
+                            ? CircularProgressIndicator(
+                                color: whiteColor,
+                              )
+                            : (hashTagState is GettingAllHashTagsFailed)
+                                ? Row(
+                                    children: [
+                                      const Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(left: 16),
+                                          child: GoogleText(
+                                              text:
+                                                  "Nous n'avons pas pu récupérer vos hashtags, veuillez rééssayer"),
+                                        ),
+                                      ),
+                                      IconButton(
+                                          onPressed: () => context
+                                              .read<HashtagCubit>()
+                                              .getHashTags(),
+                                          icon: Icon(
+                                            Icons.download,
+                                            color: whiteColor,
+                                          ))
+                                    ],
+                                  )
+                                : Container();
+                  },
+                ),
+                CustomTextField(
+                  controller: noteController,
+                  size: 15,
+                  hintText: "Ajouter une note",
+                  letterSpacing: false,
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -8,13 +8,17 @@ part 'note_state.dart';
 class NoteCubit extends Cubit<NoteState> {
   NoteCubit() : super(NoteInitial());
 
-  void addNote(Note note, List<Note> notesList) {
+  void addNote(Note note) {
     try {
       emit(AddingNote());
       final Box notesBox = Hive.box("Notes");
+      List<Note> notesList =
+          List.castFrom(notesBox.get("notesList", defaultValue: []))
+              .cast<Note>();
       notesList.add(note);
       notesBox.put("notesList", notesList);
       emit(NotesAdded());
+      getNotes();
     } catch (e) {
       emit(AddingNoteFailed(error: "Error: $e"));
     }
