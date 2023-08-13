@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:note_app/data/models/hashtag.dart';
+import 'package:note_app/utils/constants.dart';
+import '../../business_logic/cubit/hashtags/hashtag_cubit.dart';
 
 class CustomDropDown extends StatelessWidget {
   final List<HashTag> list;
+  final List<HashTag> listFiltered;
 
-  const CustomDropDown({super.key, required this.list});
+  const CustomDropDown(
+      {super.key, required this.list, required this.listFiltered});
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +26,17 @@ class CustomDropDown extends StatelessWidget {
       ),
       validator: null,
       hint: Text(
-        "Selectionnez le hashtag",
+        (list.isEmpty)
+            ? "Liste vide, ajoutez un hashatg"
+            : "Selectionnez le hashtag",
         style: GoogleFonts.poppins(
-          fontWeight: FontWeight.w300,
+          fontWeight: FontWeight.w400,
           color: const Color(0xff848181),
         ),
       ),
       onChanged: (e) {
-        /*setState(() {
-          widget.controller?.text = e!;
-        });
-        widget.getSelectedValue!(e!);*/
+        //=>
+        context.read<HashtagCubit>().addFilteredChoice(list, listFiltered, e!);
       },
       isExpanded: true,
       borderRadius: BorderRadius.circular(6.0),
@@ -39,7 +44,10 @@ class CustomDropDown extends StatelessWidget {
           .map(
             (e) => DropdownMenuItem<String>(
               value: e.label,
-              child: Text(e.label),
+              child: Text(
+                e.label,
+                style: TextStyle(color: whiteColor),
+              ),
             ),
           )
           .toList(),

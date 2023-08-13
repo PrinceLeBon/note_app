@@ -11,8 +11,10 @@ class GettingAllHashTags extends HashtagState {}
 
 class HashTagsGotten extends HashtagState {
   final List<HashTag> hashTags;
+  final List<HashTag> hashTagsFiltered;
 
-  const HashTagsGotten({required this.hashTags});
+  const HashTagsGotten(
+      {required this.hashTags, required this.hashTagsFiltered});
 }
 
 class GettingAllHashTagsFailed extends HashtagState {
@@ -29,4 +31,14 @@ class AddingHashTagFailed extends HashtagState {
   final String error;
 
   const AddingHashTagFailed({required this.error});
+}
+
+class DeletingHashTag extends HashtagState {}
+
+class HashTagsDeleted extends HashtagState {}
+
+class DeletingHashTagFailed extends HashtagState {
+  final String error;
+
+  const DeletingHashTagFailed({required this.error});
 }

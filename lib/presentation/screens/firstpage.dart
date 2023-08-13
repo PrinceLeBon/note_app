@@ -42,7 +42,7 @@ class _FirstPageState extends State<FirstPage> {
                           itemCount: state.hashTags.length,
                           itemBuilder: (context, index) {
                             return Hashtags(
-                              label: state.hashTags[index].label,
+                              hashtag: state.hashTags[index],
                             );
                           }),
                     );

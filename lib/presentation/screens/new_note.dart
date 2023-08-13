@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:note_app/business_logic/cubit/hashtags/hashtag_cubit.dart';
+import 'package:note_app/data/models/hashtag.dart';
 import 'package:note_app/presentation/widgets/custom_text_field.dart';
 import 'package:note_app/presentation/widgets/gap.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
@@ -62,12 +63,16 @@ class _NewNoteState extends State<NewNote> {
                             Row(
                               children: [
                                 Expanded(
-                                  child: CustomDropDown(list: state.hashTags),
+                                  child: CustomDropDown(
+                                    list: state.hashTags,
+                                    listFiltered: state.hashTagsFiltered,
+                                  ),
                                 ),
                                 const Gap(horizontalAlign: true, gap: 10),
                                 InkWell(
                                   onTap: () {
-                                    pickColor(context);
+                                    pickColor(context, state.hashTags,
+                                        state.hashTagsFiltered);
                                   },
                                   child: Container(
                                     padding: const EdgeInsets.all(4.0),
@@ -84,7 +89,10 @@ class _NewNoteState extends State<NewNote> {
                                 )
                               ],
                             ),
-                            ShowHashtags(hashtags: state.hashTags),
+                            ShowHashtags(
+                              hashtags: state.hashTags,
+                              hashtagsFiltered: state.hashTagsFiltered,
+                            ),
                           ],
                         )
                       : (state is GettingAllHashTags)
@@ -132,7 +140,8 @@ class _NewNoteState extends State<NewNote> {
     setState(() => pickerColor = color);
   }
 
-  Future pickColor(BuildContext context) {
+  Future pickColor(BuildContext context, List<HashTag> hashTagsList,
+      List<HashTag> hashTagsListFiltered) {
     return showDialog(
         context: context,
         builder: (context) {
@@ -183,8 +192,15 @@ class _NewNoteState extends State<NewNote> {
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     setState(() => currentColor = pickerColor);
-                    hashTagController.text = "";
                     final String color = ColorParser.color(pickerColor).toHex();
+                    context.read<HashtagCubit>().addHashTag(
+                        HashTag(
+                            id: DateTime.now().toString(),
+                            label: hashTagController.text.trim(),
+                            color: color),
+                        hashTagsList,
+                        hashTagsListFiltered);
+                    hashTagController.text = "";
                     Navigator.of(context).pop();
                   }
                 },

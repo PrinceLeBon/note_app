@@ -22,7 +22,7 @@ class TempHashTag extends StatelessWidget {
         left: 6.0,
       ),
       decoration: BoxDecoration(
-        color: whiteColor,
+        color: hexToColor(hashtag.color),
         borderRadius: BorderRadius.circular(30.0),
       ),
       child: Row(
@@ -34,9 +34,9 @@ class TempHashTag extends StatelessWidget {
               shape: BoxShape.circle,
               color: Colors.grey,
             ),
-            child: Icon(
+            child: const Icon(
               Icons.close,
-              color: hexToColor(hashtag.color),
+              color: Colors.white,
               size: 14.0,
             ),
           ),
@@ -56,8 +56,4 @@ class TempHashTag extends StatelessWidget {
       ),
     );
   }
-}
-
-Color hexToColor(String code) {
-  return Color(int.parse(code.substring(1, 7), radix: 16) + 0xFF000000);
 }
