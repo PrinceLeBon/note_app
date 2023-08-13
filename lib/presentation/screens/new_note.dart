@@ -1,6 +1,8 @@
 import 'package:color_parser/color_parser.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:note_app/business_logic/cubit/hashtags/hashtag_cubit.dart';
 import 'package:note_app/presentation/widgets/custom_text_field.dart';
 import 'package:note_app/presentation/widgets/gap.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
@@ -52,57 +54,67 @@ class _NewNoteState extends State<NewNote> {
                 hintText: "Title",
                 letterSpacing: true,
               ),
-              Row(
-                children: [
-                  const Expanded(
-                    child: CustomDropDown(list: [
-                      "hashtag",
-                    ]),
-                  ),
-                  const Gap(horizontalAlign: true, gap: 10),
-                  InkWell(
-                    onTap: () {
-                      pickColor(context);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(4.0),
-                      decoration: BoxDecoration(
-                        color: whiteColor,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        Icons.add,
-                        color: blackColor,
-                        size: 16.0,
-                      ),
-                    ),
-                  )
-                ],
+              BlocBuilder<HashtagCubit, HashtagState>(
+                builder: (context, state) {
+                  return (state is HashTagsGotten)
+                      ? Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: CustomDropDown(list: state.hashTags),
+                                ),
+                                const Gap(horizontalAlign: true, gap: 10),
+                                InkWell(
+                                  onTap: () {
+                                    pickColor(context);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(4.0),
+                                    decoration: BoxDecoration(
+                                      color: whiteColor,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Icon(
+                                      Icons.add,
+                                      color: blackColor,
+                                      size: 16.0,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                            ShowHashtags(hashtags: state.hashTags),
+                          ],
+                        )
+                      : (state is GettingAllHashTags)
+                          ? CircularProgressIndicator(
+                              color: whiteColor,
+                            )
+                          : (state is GettingAllHashTagsFailed)
+                              ? Row(
+                                  children: [
+                                    const Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 16),
+                                        child: GoogleText(
+                                            text:
+                                                "Nous n'avons pas pu récupérer vos hashtags, veuillez rééssayer"),
+                                      ),
+                                    ),
+                                    IconButton(
+                                        onPressed: () => context
+                                            .read<HashtagCubit>()
+                                            .getHashTags(),
+                                        icon: Icon(
+                                          Icons.download,
+                                          color: whiteColor,
+                                        ))
+                                  ],
+                                )
+                              : Container();
+                },
               ),
-              const ShowHashtags(hashtags: [
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-                "hashtag",
-              ]),
               CustomTextField(
                 controller: noteController,
                 size: 15,
@@ -144,7 +156,7 @@ class _NewNoteState extends State<NewNote> {
                       letterSpacing: false,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Veuillez donner un nom au hashtag";
+                          return "Veuillez donner un nom à votre hashtag";
                         }
                         return null;
                       },
@@ -172,9 +184,7 @@ class _NewNoteState extends State<NewNote> {
                   if (_formKey.currentState!.validate()) {
                     setState(() => currentColor = pickerColor);
                     hashTagController.text = "";
-                    final String color =
-                    ColorParser.color(pickerColor)
-                        .toHex();
+                    final String color = ColorParser.color(pickerColor).toHex();
                     Navigator.of(context).pop();
                   }
                 },

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:note_app/business_logic/cubit/hashtags/hashtag_cubit.dart';
+import 'package:note_app/business_logic/cubit/notes/note_cubit.dart';
 import 'package:note_app/data/models/hashtag.dart';
 import 'package:note_app/data/models/note.dart';
 import 'package:note_app/presentation/screens/homepage.dart';
@@ -18,21 +21,31 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        canvasColor: blackColor,
-        scaffoldBackgroundColor: blackColor,
-        appBarTheme: AppBarTheme(
-          color: blackColor,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<NoteCubit>(
+          create: (BuildContext context) => NoteCubit()..getNotes(),
         ),
-        textTheme: Theme.of(context).textTheme.apply(
-              bodyColor: whiteColor,
-              displayColor: whiteColor,
-            ),
+        BlocProvider<HashtagCubit>(
+          create: (BuildContext context) => HashtagCubit()..getHashTags(),
+        ),
+      ],
+      child: MaterialApp(
+        theme: ThemeData(
+          canvasColor: blackColor,
+          scaffoldBackgroundColor: blackColor,
+          appBarTheme: AppBarTheme(
+            color: blackColor,
+          ),
+          textTheme: Theme.of(context).textTheme.apply(
+                bodyColor: whiteColor,
+                displayColor: whiteColor,
+              ),
+        ),
+        debugShowCheckedModeBanner: false,
+        debugShowMaterialGrid: false,
+        home: const MyHomePage(),
       ),
-      debugShowCheckedModeBanner: false,
-      debugShowMaterialGrid: false,
-      home: const MyHomePage(),
     );
   }
 }

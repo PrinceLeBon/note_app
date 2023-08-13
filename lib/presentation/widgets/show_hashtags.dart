@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:note_app/data/models/hashtag.dart';
 import 'package:note_app/presentation/widgets/gap.dart';
 import 'package:note_app/presentation/widgets/tem_hashtag.dart';
-import 'package:note_app/utils/constants.dart';
 
 class ShowHashtags extends StatelessWidget {
-  final List<String> hashtags;
+  final List<HashTag> hashtags;
 
   const ShowHashtags({super.key, required this.hashtags});
 

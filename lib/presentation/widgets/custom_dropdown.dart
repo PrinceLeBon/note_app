@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:note_app/data/models/hashtag.dart';
 
 class CustomDropDown extends StatelessWidget {
-  final List<String> list;
+  final List<HashTag> list;
 
   const CustomDropDown({super.key, required this.list});
 
@@ -37,8 +38,8 @@ class CustomDropDown extends StatelessWidget {
       items: list
           .map(
             (e) => DropdownMenuItem<String>(
-              value: e,
-              child: Text(e),
+              value: e.label,
+              child: Text(e.label),
             ),
           )
           .toList(),

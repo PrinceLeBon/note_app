@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note_app/presentation/widgets/gap.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
 
 class Note extends StatelessWidget {
@@ -22,20 +23,18 @@ class Note extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                height: 10,
-              ),
+              const Gap(horizontalAlign: false, gap: 10),
               GoogleText(
                 text: title,
                 fontWeight: true,
+                color: Colors.black,
               ),
-              Container(
-                height: 10,
+              const Gap(horizontalAlign: false, gap: 10),
+              GoogleText(
+                text: label,
+                color: Colors.black,
               ),
-              GoogleText(text: label),
-              Container(
-                height: 10,
-              ),
+              const Gap(horizontalAlign: false, gap: 10),
             ],
           ),
         ),

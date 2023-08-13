@@ -23,7 +23,7 @@ class HashtagCubit extends Cubit<HashtagState> {
   void getHashTags() {
     try {
       emit(GettingAllHashTags());
-      final Box noteBox = Hive.box("Note");
+      final Box noteBox = Hive.box("Notes");
       List<HashTag> hashTagsList =
           List.castFrom(noteBox.get("hashTagsList", defaultValue: []))
               .cast<HashTag>();

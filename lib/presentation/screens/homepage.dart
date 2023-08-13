@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_app/business_logic/cubit/hashtags/hashtag_cubit.dart';
 import 'package:note_app/presentation/screens/firstpage.dart';
 import 'package:note_app/presentation/screens/new_note.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
