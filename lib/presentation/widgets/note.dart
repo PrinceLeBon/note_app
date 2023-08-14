@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:note_app/presentation/widgets/gap.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
+import 'package:note_app/utils/constants.dart';
+import '../../data/models/hashtag.dart';
+import '../../data/models/note.dart';
 
-class Note extends StatelessWidget {
-  final String title;
-  final String label;
+class NoteCard extends StatelessWidget {
+  final Note note;
 
-  const Note({super.key, required this.title, required this.label});
+  const NoteCard({super.key, required this.note});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +17,7 @@ class Note extends StatelessWidget {
       padding: const EdgeInsets.only(top: 10, bottom: 10),
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.pink[200],
+          color: getColorOfCard(note.hashtagsId),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
@@ -25,13 +28,13 @@ class Note extends StatelessWidget {
             children: [
               const Gap(horizontalAlign: false, gap: 10),
               GoogleText(
-                text: title,
+                text: note.title.isEmpty ? "Sans titre" : note.title,
                 fontWeight: true,
                 color: Colors.black,
               ),
               const Gap(horizontalAlign: false, gap: 10),
               GoogleText(
-                text: label,
+                text: note.note.isEmpty ? "Aucun contenu" : note.note,
                 color: Colors.black,
               ),
               const Gap(horizontalAlign: false, gap: 10),
@@ -41,4 +44,16 @@ class Note extends StatelessWidget {
       ),
     );
   }
+}
+
+Color getColorOfCard(List<String> hashTagsId) {
+  if (hashTagsId.isEmpty) {
+    return Colors.grey;
+  }
+  final Box noteBox = Hive.box("Notes");
+  HashTag result = List.castFrom(noteBox.get("hashTagsList", defaultValue: []))
+      .cast<HashTag>()
+      .where((hashtag) => hashtag.id == hashTagsId[0])
+      .toList()[0];
+  return hexToColor(result.color);
 }

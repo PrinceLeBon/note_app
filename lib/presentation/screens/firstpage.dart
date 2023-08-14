@@ -90,9 +90,8 @@ class _FirstPageState extends State<FirstPage> {
                         shrinkWrap: true,
                         itemCount: state.notesFiltered.length,
                         itemBuilder: (context, index) {
-                          return Note(
-                            title: state.notesFiltered[index].title,
-                            label: state.notesFiltered[index].note,
+                          return NoteCard(
+                            note: state.notesFiltered[index],
                           );
                         });
                   }
