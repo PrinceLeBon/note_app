@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:note_app/presentation/screens/note_details.dart';
 import 'package:note_app/presentation/widgets/gap.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
 import 'package:note_app/utils/constants.dart';
@@ -15,30 +16,37 @@ class NoteCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 10, bottom: 10),
-      child: Container(
-        decoration: BoxDecoration(
-          color: getColorOfCard(note.hashtagsId),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Gap(horizontalAlign: false, gap: 10),
-              GoogleText(
-                text: note.title.isEmpty ? "Sans titre" : note.title,
-                fontWeight: true,
-                color: Colors.black,
-              ),
-              const Gap(horizontalAlign: false, gap: 10),
-              GoogleText(
-                text: note.note.isEmpty ? "Aucun contenu" : note.note,
-                color: Colors.black,
-              ),
-              const Gap(horizontalAlign: false, gap: 10),
-            ],
+      child: InkWell(
+        onTap: () =>
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return NoteView(note: note);
+        })),
+        child: Container(
+          decoration: BoxDecoration(
+            color: getColorOfCard(note.hashtagsId),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Gap(horizontalAlign: false, gap: 10),
+                GoogleText(
+                  text: note.title.isEmpty ? "Sans titre" : note.title,
+                  fontWeight: true,
+                  color: Colors.black,
+                ),
+                const Gap(horizontalAlign: false, gap: 10),
+                GoogleText(
+                  text: note.note.isEmpty ? "Aucun contenu" : note.note,
+                  color: Colors.black,
+                  card: true,
+                ),
+                const Gap(horizontalAlign: false, gap: 10),
+              ],
+            ),
           ),
         ),
       ),

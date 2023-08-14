@@ -6,13 +6,16 @@ class GoogleText extends StatelessWidget {
   final bool fontWeight;
   final double fontSize;
   final Color? color;
+  final bool card;
 
-  const GoogleText(
-      {super.key,
-      required this.text,
-      this.fontWeight = false,
-      this.fontSize = 14,
-      this.color});
+  const GoogleText({
+    super.key,
+    required this.text,
+    this.fontWeight = false,
+    this.fontSize = 14,
+    this.color,
+    this.card = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +26,8 @@ class GoogleText extends StatelessWidget {
         fontSize: fontSize,
         color: color,
       ),
+      overflow: card ? TextOverflow.ellipsis : null,
+      maxLines: card ? 1 : null,
     );
   }
 }
