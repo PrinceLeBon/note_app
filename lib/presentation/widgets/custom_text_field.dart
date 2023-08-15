@@ -8,12 +8,14 @@ class CustomTextField extends StatelessWidget {
   final String hintText;
   final bool letterSpacing;
   final String? Function(String?)? validator;
+  final void Function(String?)? onChanged;
 
   const CustomTextField(
       {super.key,
       required this.controller,
       required this.size,
       this.validator,
+      this.onChanged,
       required this.hintText,
       required this.letterSpacing});
 
@@ -31,6 +33,7 @@ class CustomTextField extends StatelessWidget {
         fontSize: size,
         color: whiteColor,
       ),
+      onChanged: onChanged,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: GoogleFonts.poppins(

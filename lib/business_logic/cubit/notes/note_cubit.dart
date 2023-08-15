@@ -36,4 +36,43 @@ class NoteCubit extends Cubit<NoteState> {
       emit(GettingAllNotesFailed(error: "Error: $e"));
     }
   }
+
+  void getFilteredNotesByHashTag(String hashTag) {
+    try {
+      emit(GettingAllNotes());
+      final Box noteBox = Hive.box("Notes");
+      List<Note> notesList =
+          List.castFrom(noteBox.get("notesList", defaultValue: []))
+              .cast<Note>();
+      late List<Note> filteredList;
+      if (hashTag == "id") {
+        filteredList = notesList;
+      } else {
+        filteredList = notesList
+            .where((note) => note.hashtagsId.contains(hashTag))
+            .toList();
+      }
+      emit(NotesGotten(notes: notesList, notesFiltered: filteredList));
+    } catch (e) {
+      emit(GettingAllNotesFailed(error: "Error: $e"));
+    }
+  }
+
+  void getFilteredNotesByResearch(String keyword) {
+    try {
+      emit(GettingAllNotes());
+      final Box noteBox = Hive.box("Notes");
+      List<Note> notesList =
+          List.castFrom(noteBox.get("notesList", defaultValue: []))
+              .cast<Note>();
+      List<Note> filteredList = notesList
+          .where((note) =>
+              note.title.toLowerCase().contains(keyword) ||
+              note.note.toLowerCase().contains(keyword))
+          .toList();
+      emit(NotesGotten(notes: notesList, notesFiltered: filteredList));
+    } catch (e) {
+      emit(GettingAllNotesFailed(error: "Error: $e"));
+    }
+  }
 }

@@ -41,8 +41,14 @@ class _FirstPageState extends State<FirstPage> {
                           scrollDirection: Axis.horizontal,
                           itemCount: state.hashTags.length,
                           itemBuilder: (context, index) {
-                            return Hashtags(
-                              hashtag: state.hashTags[index],
+                            return InkWell(
+                              child: Hashtags(
+                                hashtag: state.hashTags[index],
+                              ),
+                              onTap: () => context
+                                  .read<NoteCubit>()
+                                  .getFilteredNotesByHashTag(
+                                      state.hashTags[index].id),
                             );
                           }),
                     );

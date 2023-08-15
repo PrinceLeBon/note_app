@@ -75,6 +75,7 @@ class HashtagCubit extends Cubit<HashtagState> {
       List<HashTag> hashTagsList =
           List.castFrom(noteBox.get("hashTagsList", defaultValue: []))
               .cast<HashTag>();
+      hashTagsList.insert(0, HashTag(id: "id", label: "Tout", color: "#FFFFFF}"));
       emit(HashTagsGotten(
           hashTags: hashTagsList,
           hashTagsFiltered: hashTagsListFiltered ?? []));
