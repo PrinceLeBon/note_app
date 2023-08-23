@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:hive/hive.dart';
+import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 import '../../../data/models/hashtag.dart';
 
@@ -17,6 +18,7 @@ class HashtagCubit extends Cubit<HashtagState> {
       noteBox.put("hashTagsList", hashTagsList);
       emit(HashTagsAdded());
       getHashTags(hashTagsListFiltered);
+      getHashTagsNew(hashTagsListFiltered);
     } catch (e) {
       emit(AddingHashTagFailed(error: "Error: $e"));
     }
@@ -38,33 +40,34 @@ class HashtagCubit extends Cubit<HashtagState> {
   void deleteHashTagFiltered(int index, List<HashTag> hashTagsList,
       List<HashTag> hashTagsListFiltered) {
     try {
-      emit(GettingAllHashTags());
+      emit(GettingAllHashNewTags());
       hashTagsListFiltered.removeAt(index);
-      emit(HashTagsGotten(
+      emit(HashTagsNewGotten(
           hashTags: hashTagsList, hashTagsFiltered: hashTagsListFiltered));
     } catch (e) {
-      emit(GettingAllHashTagsFailed(error: "Error: $e"));
+      emit(GettingAllHashTagsNewFailed(error: "Error: $e"));
     }
   }
 
   void addFilteredChoice(List<HashTag> hashTagsList,
       List<HashTag> hashTagsListFiltered, String label) {
     try {
-      emit(GettingAllHashTags());
+      emit(GettingAllHashNewTags());
 
       if (hashTagsListFiltered
           .where((element) => element.label == label)
           .toList()
           .isEmpty) {
+        Logger().i("ee");
         hashTagsListFiltered.add(hashTagsList
             .where((element) => element.label == label)
             .toList()[0]);
       }
 
-      emit(HashTagsGotten(
+      emit(HashTagsNewGotten(
           hashTags: hashTagsList, hashTagsFiltered: hashTagsListFiltered));
     } catch (e) {
-      emit(GettingAllHashTagsFailed(error: "Error: $e"));
+      emit(GettingAllHashTagsNewFailed(error: "Error: $e"));
     }
   }
 
@@ -75,12 +78,32 @@ class HashtagCubit extends Cubit<HashtagState> {
       List<HashTag> hashTagsList =
           List.castFrom(noteBox.get("hashTagsList", defaultValue: []))
               .cast<HashTag>();
-      hashTagsList.insert(0, HashTag(id: "id", label: "Tout", color: "#FFFFFF}"));
+      if (hashTagsList.isNotEmpty &&
+          hashTagsList.where((hashTag) => hashTag.label == "Tout").isEmpty) {
+        hashTagsList.insert(
+            0, HashTag(id: "id", label: "Tout", color: "#FFFFFF}"));
+      }
       emit(HashTagsGotten(
           hashTags: hashTagsList,
           hashTagsFiltered: hashTagsListFiltered ?? []));
     } catch (e) {
       emit(GettingAllHashTagsFailed(error: "Error: $e"));
+    }
+  }
+
+  void getHashTagsNew([List<HashTag>? hashTagsListFiltered]) {
+    try {
+      emit(GettingAllHashNewTags());
+      final Box noteBox = Hive.box("Notes");
+      List<HashTag> hashTagsList =
+          List.castFrom(noteBox.get("hashTagsList", defaultValue: []))
+              .cast<HashTag>();
+      hashTagsList.removeWhere((hashTag) => hashTag.label == "Tout");
+      emit(HashTagsNewGotten(
+          hashTags: hashTagsList,
+          hashTagsFiltered: hashTagsListFiltered ?? []));
+    } catch (e) {
+      emit(GettingAllHashTagsNewFailed(error: "Error: $e"));
     }
   }
 }

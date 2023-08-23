@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_app/business_logic/cubit/hashtags/hashtag_cubit.dart';
 import 'package:note_app/presentation/screens/firstpage.dart';
 import 'package:note_app/presentation/screens/new_note.dart';
 import 'package:note_app/presentation/widgets/custom_text_field.dart';
@@ -59,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: whiteColor,
         onPressed: () {
+          context.read<HashtagCubit>().getHashTagsNew();
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
             return const NewNote();
           }));

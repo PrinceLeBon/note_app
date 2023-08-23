@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -9,6 +10,8 @@ import 'package:note_app/presentation/screens/homepage.dart';
 import 'package:note_app/utils/constants.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  //await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await Hive.initFlutter();
   Hive.registerAdapter(NoteAdapter());
   Hive.registerAdapter(HashTagAdapter());
@@ -24,10 +27,14 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider<NoteCubit>(
-          create: (BuildContext context) => NoteCubit()..getNotes(),
+          create: (BuildContext context) =>
+          NoteCubit()
+            ..getNotes(),
         ),
         BlocProvider<HashtagCubit>(
-          create: (BuildContext context) => HashtagCubit()..getHashTags(),
+          create: (BuildContext context) =>
+          HashtagCubit()
+            ..getHashTags(),
         ),
       ],
       child: MaterialApp(
@@ -37,10 +44,13 @@ class MyApp extends StatelessWidget {
           appBarTheme: AppBarTheme(
             color: blackColor,
           ),
-          textTheme: Theme.of(context).textTheme.apply(
-                bodyColor: whiteColor,
-                displayColor: whiteColor,
-              ),
+          textTheme: Theme
+              .of(context)
+              .textTheme
+              .apply(
+            bodyColor: whiteColor,
+            displayColor: whiteColor,
+          ),
         ),
         debugShowCheckedModeBanner: false,
         debugShowMaterialGrid: false,

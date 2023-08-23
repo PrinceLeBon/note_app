@@ -35,7 +35,6 @@ class CustomDropDown extends StatelessWidget {
         ),
       ),
       onChanged: (e) {
-        //=>
         context.read<HashtagCubit>().addFilteredChoice(list, listFiltered, e!);
       },
       isExpanded: true,

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:note_app/data/models/note.dart';
 import 'package:note_app/presentation/widgets/gap.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
 import 'package:note_app/presentation/widgets/hashtags.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../data/models/hashtag.dart';
 
 class NoteView extends StatelessWidget {
@@ -44,12 +46,19 @@ class NoteView extends StatelessWidget {
                     .toList(),
               ),
               const Gap(horizontalAlign: false, gap: 10),
-              SelectableText(
-                note.note.isEmpty ? "Aucun contenu" : note.note,
+              SelectableLinkify(
+                onOpen: (link) async {
+                  if (!await launchUrl(Uri.parse(link.url),
+                      mode: LaunchMode.externalNonBrowserApplication)) {
+                    throw Exception('Could not launch ${link.url}');
+                  }
+                },
+                options: const LinkifyOptions(humanize: false),
+                text: note.note.isEmpty ? "Aucun contenu" : note.note,
                 style: GoogleFonts.poppins(
                   fontSize: 14,
                 ),
-              ),
+              )
             ],
           ),
         ),

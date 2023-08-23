@@ -45,7 +45,7 @@ class _NewNoteState extends State<NewNote> {
             builder: (context, state) {
               return InkWell(
                 onTap: () {
-                  if (state is HashTagsGotten) {
+                  if (state is HashTagsNewGotten) {
                     if (titleController.text.trim().isEmpty &&
                         noteController.text.trim().isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -82,6 +82,7 @@ class _NewNoteState extends State<NewNote> {
       body: BlocListener<NoteCubit, NoteState>(
         listener: (context, noteState) {
           if (noteState is NotesAdded) {
+            context.read<HashtagCubit>().getHashTags();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: GoogleText(text: "Note ajoutée"),
@@ -114,7 +115,7 @@ class _NewNoteState extends State<NewNote> {
                     }
                   },
                   builder: (context, hashTagState) {
-                    return (hashTagState is HashTagsGotten)
+                    return (hashTagState is HashTagsNewGotten)
                         ? Column(
                             children: [
                               Row(
@@ -153,11 +154,11 @@ class _NewNoteState extends State<NewNote> {
                               ),
                             ],
                           )
-                        : (hashTagState is GettingAllHashTags)
+                        : (hashTagState is GettingAllHashNewTags)
                             ? CircularProgressIndicator(
                                 color: whiteColor,
                               )
-                            : (hashTagState is GettingAllHashTagsFailed)
+                            : (hashTagState is GettingAllHashTagsNewFailed)
                                 ? Row(
                                     children: [
                                       const Expanded(
@@ -171,7 +172,7 @@ class _NewNoteState extends State<NewNote> {
                                       IconButton(
                                           onPressed: () => context
                                               .read<HashtagCubit>()
-                                              .getHashTags(),
+                                              .getHashTagsNew(),
                                           icon: Icon(
                                             Icons.download,
                                             color: whiteColor,

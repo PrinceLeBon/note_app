@@ -23,6 +23,22 @@ class GettingAllHashTagsFailed extends HashtagState {
   const GettingAllHashTagsFailed({required this.error});
 }
 
+class GettingAllHashNewTags extends HashtagState {}
+
+class HashTagsNewGotten extends HashtagState {
+  final List<HashTag> hashTags;
+  final List<HashTag> hashTagsFiltered;
+
+  const HashTagsNewGotten(
+      {required this.hashTags, required this.hashTagsFiltered});
+}
+
+class GettingAllHashTagsNewFailed extends HashtagState {
+  final String error;
+
+  const GettingAllHashTagsNewFailed({required this.error});
+}
+
 class AddingHashTag extends HashtagState {}
 
 class HashTagsAdded extends HashtagState {}
