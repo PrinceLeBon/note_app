@@ -7,7 +7,7 @@ import 'package:note_app/data/models/hashtag.dart';
 import 'package:note_app/data/models/note.dart';
 import 'package:note_app/data/repositories/hashtag.dart';
 import 'package:note_app/data/repositories/note.dart';
-import 'package:note_app/presentation/screens/homepage.dart';
+import 'package:note_app/presentation/screens/splash_screen.dart';
 import 'package:note_app/utils/constants.dart';
 
 void main() async {
@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
           ),
           debugShowCheckedModeBanner: false,
           debugShowMaterialGrid: false,
-          home: const MyHomePage(),
+          home: const SplashScreen(),
         ),
       ),
     );
