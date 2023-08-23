@@ -2,15 +2,19 @@ import 'package:bloc/bloc.dart';
 import 'package:hive/hive.dart';
 import 'package:meta/meta.dart';
 import '../../../data/models/note.dart';
+import '../../../data/repositories/note.dart';
 
 part 'note_state.dart';
 
 class NoteCubit extends Cubit<NoteState> {
-  NoteCubit() : super(NoteInitial());
+  final NoteRepository noteRepository;
 
-  void addNote(Note note) {
+  NoteCubit({required this.noteRepository}) : super(NoteInitial());
+
+  Future<void> addNote(Note note) async {
     try {
       emit(AddingNote());
+      await noteRepository.addDocs(note);
       final Box notesBox = Hive.box("Notes");
       List<Note> notesList =
           List.castFrom(notesBox.get("notesList", defaultValue: []))
@@ -24,9 +28,10 @@ class NoteCubit extends Cubit<NoteState> {
     }
   }
 
-  void getNotes() {
+  Future<void> getNotes() async {
     try {
       emit(GettingAllNotes());
+      List<Note> notesListFromFirestore = await noteRepository.getAllNotes();
       final Box noteBox = Hive.box("Notes");
       List<Note> notesList =
           List.castFrom(noteBox.get("notesList", defaultValue: []))

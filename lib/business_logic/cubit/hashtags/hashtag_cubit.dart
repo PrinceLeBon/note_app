@@ -3,16 +3,20 @@ import 'package:hive/hive.dart';
 import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 import '../../../data/models/hashtag.dart';
+import '../../../data/repositories/hashtag.dart';
 
 part 'hashtag_state.dart';
 
 class HashtagCubit extends Cubit<HashtagState> {
-  HashtagCubit() : super(HashtagInitial());
+  final HashTagRepository hashTagRepository;
 
-  void addHashTag(HashTag hashTag, List<HashTag> hashTagsList,
-      List<HashTag> hashTagsListFiltered) {
+  HashtagCubit({required this.hashTagRepository}) : super(HashtagInitial());
+
+  Future<void> addHashTag(HashTag hashTag, List<HashTag> hashTagsList,
+      List<HashTag> hashTagsListFiltered) async {
     try {
       emit(AddingHashTag());
+      await hashTagRepository.addDocs(hashTag);
       final Box noteBox = Hive.box("Notes");
       hashTagsList.add(hashTag);
       noteBox.put("hashTagsList", hashTagsList);
@@ -71,9 +75,11 @@ class HashtagCubit extends Cubit<HashtagState> {
     }
   }
 
-  void getHashTags([List<HashTag>? hashTagsListFiltered]) {
+  Future<void> getHashTags([List<HashTag>? hashTagsListFiltered]) async {
     try {
       emit(GettingAllHashTags());
+      List<HashTag> hashTagsListFromFiresore =
+          await hashTagRepository.getAllHashTags();
       final Box noteBox = Hive.box("Notes");
       List<HashTag> hashTagsList =
           List.castFrom(noteBox.get("hashTagsList", defaultValue: []))
