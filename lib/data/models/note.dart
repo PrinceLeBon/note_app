@@ -15,7 +15,7 @@ class Note {
   @HiveField(4)
   final String note;
   @HiveField(5)
-  final DateTime dateOfCreation;
+  final DateTime creationDate;
 
   Note({
     required this.id,
@@ -23,7 +23,7 @@ class Note {
     required this.userId,
     required this.title,
     required this.note,
-    required this.dateOfCreation,
+    required this.creationDate,
   });
 
   Map<String, dynamic> toJson() {
@@ -33,7 +33,7 @@ class Note {
       'userId': userId,
       'title': title,
       'note': note,
-      'dateOfCreation': dateOfCreation.millisecondsSinceEpoch,
+      'creationDate': creationDate.millisecondsSinceEpoch,
     };
   }
 
@@ -44,8 +44,8 @@ class Note {
       userId: json['userId'],
       title: json['title'],
       note: json['note'],
-      dateOfCreation:
-          DateTime.fromMillisecondsSinceEpoch(json['dateOfCreation']),
+      creationDate:
+          DateTime.fromMillisecondsSinceEpoch(json['creationDate']),
     );
   }
 }

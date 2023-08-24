@@ -10,11 +10,14 @@ class HashTag {
   final String label;
   @HiveField(2)
   final String color;
+  @HiveField(3)
+  final DateTime creationDate;
 
   HashTag({
     required this.id,
     required this.label,
     required this.color,
+    required this.creationDate,
   });
 
   factory HashTag.fromJson(Map<String, dynamic> json) {
@@ -22,6 +25,7 @@ class HashTag {
       id: json['id'],
       label: json['label'],
       color: json['color'],
+      creationDate: DateTime.fromMillisecondsSinceEpoch(json['creationDate']),
     );
   }
 
@@ -30,6 +34,7 @@ class HashTag {
       'id': id,
       'label': label,
       'color': color,
+      'creationDate': creationDate.millisecondsSinceEpoch,
     };
   }
 }

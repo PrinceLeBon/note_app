@@ -22,7 +22,7 @@ class NoteAdapter extends TypeAdapter<Note> {
       userId: fields[2] as String,
       title: fields[3] as String,
       note: fields[4] as String,
-      dateOfCreation: fields[5] as DateTime,
+      creationDate: fields[5] as DateTime,
     );
   }
 
@@ -41,7 +41,7 @@ class NoteAdapter extends TypeAdapter<Note> {
       ..writeByte(4)
       ..write(obj.note)
       ..writeByte(5)
-      ..write(obj.dateOfCreation);
+      ..write(obj.creationDate);
   }
 
   @override

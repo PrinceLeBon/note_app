@@ -65,7 +65,7 @@ class _NewNoteState extends State<NewNote> {
                                 userId: "userId",
                                 title: titleController.text.trim(),
                                 note: noteController.text.trim(),
-                                dateOfCreation: DateTime.now()),
+                                creationDate: DateTime.now()),
                           );
                     }
                   }
@@ -257,7 +257,8 @@ class _NewNoteState extends State<NewNote> {
                         HashTag(
                             id: DateTime.now().toString(),
                             label: hashTagController.text.trim(),
-                            color: color),
+                            color: color,
+                            creationDate: DateTime.now()),
                         hashTagsList,
                         hashTagsListFiltered);
                     hashTagController.text = "";

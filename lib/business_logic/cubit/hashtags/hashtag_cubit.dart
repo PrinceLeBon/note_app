@@ -87,7 +87,13 @@ class HashtagCubit extends Cubit<HashtagState> {
       if (hashTagsList.isNotEmpty &&
           hashTagsList.where((hashTag) => hashTag.label == "Tout").isEmpty) {
         hashTagsList.insert(
-            0, HashTag(id: "id", label: "Tout", color: "#FFFFFF}"));
+            0,
+            HashTag(
+              id: "id",
+              label: "Tout",
+              color: "#FFFFFF}",
+              creationDate: DateTime.now(),
+            ));
       }
       emit(HashTagsGotten(
           hashTags: hashTagsList,
