@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:hive/hive.dart';
 import 'package:logger/logger.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class FirestoreAPI {
   const FirestoreAPI();
@@ -31,5 +34,11 @@ class FirestoreAPI {
 
     await doc.set(data).onError(
         (error, stackTrace) => Logger().e("Error writing document: $error"));
+  }
+
+  Future<Reference> addFile(String folder, String name, File file) async {
+    final ref = FirebaseStorage.instance.ref().child(folder).child(name);
+    await ref.putFile(file);
+    return ref;
   }
 }

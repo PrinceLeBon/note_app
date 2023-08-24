@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -9,12 +10,15 @@ import 'package:note_app/data/repositories/hashtag.dart';
 import 'package:note_app/data/repositories/note.dart';
 import 'package:note_app/presentation/screens/splash_screen.dart';
 import 'package:note_app/utils/constants.dart';
+import 'data/models/user.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await Hive.initFlutter();
   Hive.registerAdapter(NoteAdapter());
   Hive.registerAdapter(HashTagAdapter());
+  Hive.registerAdapter(UserModelAdapter());
   await Hive.openBox("Notes");
   await Hive.openBox("User");
   runApp(const MyApp());

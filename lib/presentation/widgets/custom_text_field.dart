@@ -7,6 +7,7 @@ class CustomTextField extends StatelessWidget {
   final double size;
   final String hintText;
   final bool letterSpacing;
+  final bool password;
   final String? Function(String?)? validator;
   final void Function(String?)? onChanged;
 
@@ -16,6 +17,7 @@ class CustomTextField extends StatelessWidget {
       required this.size,
       this.validator,
       this.onChanged,
+      this.password = false,
       required this.hintText,
       required this.letterSpacing});
 
@@ -24,10 +26,12 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       validator: validator,
       keyboardType: TextInputType.multiline,
-      maxLines: null,
+      maxLines: (password) ? 1 : null,
       cursorColor: whiteColor,
       controller: controller,
       minLines: 1,
+      obscureText: password,
+      obscuringCharacter: "*",
       style: GoogleFonts.poppins(
         fontWeight: FontWeight.w400,
         fontSize: size,
