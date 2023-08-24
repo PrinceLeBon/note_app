@@ -1,34 +1,29 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:hive/hive.dart';
 import 'package:logger/logger.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class FirestoreAPI {
   const FirestoreAPI();
 
-  Future<QuerySnapshot> get(String collectionName) async {
+  Future<QuerySnapshot> get(String collectionName, String userId) async {
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection(collectionName);
 
-    final Box userBox = Hive.box("User");
-    String userId = userBox.get("id", defaultValue: "");
-
-    var docs =
-        await collectionReference.where("userId", isEqualTo: userId).get();
+    var docs = await collectionReference
+        .where((collectionName == "users") ? "id" : "userId", isEqualTo: userId)
+        .get();
 
     return docs;
   }
 
-  Future addDocs(String collectionName, Map<String, dynamic> data) async {
+  Future addDocs(
+      String collectionName, Map<String, dynamic> data, String userId) async {
     final doc = FirebaseFirestore.instance.collection(collectionName).doc();
 
     data["id"] = doc.id;
 
     if (collectionName != "users") {
-      final Box userBox = Hive.box("User");
-      String userId = userBox.get("id", defaultValue: "");
       data["userId"] = userId;
     }
 

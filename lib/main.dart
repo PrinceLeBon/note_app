@@ -4,10 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:note_app/business_logic/cubit/hashtags/hashtag_cubit.dart';
 import 'package:note_app/business_logic/cubit/notes/note_cubit.dart';
+import 'package:note_app/business_logic/cubit/users/user_cubit.dart';
 import 'package:note_app/data/models/hashtag.dart';
 import 'package:note_app/data/models/note.dart';
 import 'package:note_app/data/repositories/hashtag.dart';
 import 'package:note_app/data/repositories/note.dart';
+import 'package:note_app/data/repositories/user.dart';
 import 'package:note_app/presentation/screens/splash_screen.dart';
 import 'package:note_app/utils/constants.dart';
 import 'data/models/user.dart';
@@ -35,6 +37,8 @@ class MyApp extends StatelessWidget {
             create: (context) => NoteRepository()),
         RepositoryProvider<HashTagRepository>(
             create: (context) => HashTagRepository()),
+        RepositoryProvider<UserRepository>(
+            create: (context) => UserRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -48,6 +52,10 @@ class MyApp extends StatelessWidget {
                 hashTagRepository:
                     RepositoryProvider.of<HashTagRepository>(context))
               ..getHashTags(),
+          ),
+          BlocProvider<UserCubit>(
+            create: (BuildContext context) => UserCubit(
+                userRepository: RepositoryProvider.of<UserRepository>(context)),
           ),
         ],
         child: MaterialApp(

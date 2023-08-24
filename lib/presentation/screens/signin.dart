@@ -1,11 +1,17 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import '../../business_logic/cubit/users/user_cubit.dart';
+import '../widgets/customSnackBar.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/gap.dart';
 import '../widgets/google_text.dart';
+import '../widgets/progress_indicator.dart';
+import 'login.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({super.key});
@@ -37,125 +43,157 @@ class _SignInState extends State<SignIn> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Center(
-            child: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    (selectedContent == null)
-                        ? InkWell(
-                            onTap: () => pickImage(),
-                            child: Container(
-                              width: 100,
-                              height: 100,
-                              decoration: const BoxDecoration(
-                                  color: Colors.white, shape: BoxShape.circle),
-                            ),
-                          )
-                        : Container(
-                            width: 100,
-                            height: 100,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: FileImage(
-                                        File((selectedContent?.path)!)),
-                                    fit: BoxFit.cover)),
-                          ),
-                    CustomTextField(
-                      controller: nameController,
-                      size: 14,
-                      hintText: "Nom",
-                      letterSpacing: false,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Veuillez remplir ce champ';
-                        }
-                        return null;
-                      },
-                    ),
-                    const Gap(horizontalAlign: false, gap: 10),
-                    CustomTextField(
-                      controller: prenomController,
-                      size: 14,
-                      hintText: "Prénom",
-                      letterSpacing: false,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Veuillez remplir ce champ';
-                        }
-                        return null;
-                      },
-                    ),
-                    const Gap(horizontalAlign: false, gap: 10),
-                    CustomTextField(
-                      controller: mailController,
-                      size: 14,
-                      hintText: "Adresse mail",
-                      letterSpacing: false,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Veuillez remplir ce champ';
-                        }
-                        return null;
-                      },
-                    ),
-                    const Gap(horizontalAlign: false, gap: 10),
-                    CustomTextField(
-                      controller: passwordController1,
-                      size: 14,
-                      hintText: "Mot de passe",
-                      letterSpacing: false,
-                      password: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Veuillez entre un mot de passe';
-                        } else if (value.length < 6) {
-                          return 'Votre mot de passe doit dépasser 5 caractères';
-                        } else if (passwordController1.text.trim() !=
-                            passwordController2.text.trim()) {
-                          return "Les mots de passe doivent etre identitiques";
-                        }
-                        return null;
-                      },
-                    ),
-                    const Gap(horizontalAlign: false, gap: 10),
-                    CustomTextField(
-                      controller: passwordController2,
-                      size: 14,
-                      hintText: "Confirmer le mot de passe",
-                      letterSpacing: false,
-                      password: true,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Veuillez entre un mot de passe';
-                        } else if (value.length < 6) {
-                          return 'Votre mot de passe doit dépasser 5 caractères';
-                        } else if (passwordController1.text.trim() !=
-                            passwordController2.text.trim()) {
-                          return "Les mots de passe doivent etre identitiques";
-                        }
-                        return null;
-                      },
-                    ),
-                    const Gap(horizontalAlign: false, gap: 10),
-                    TextButton(
-                      onPressed: () => Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) {
-                        return const SignIn();
-                      })),
-                      child: const GoogleText(
-                        text: "S'inscrire",
-                        color: Colors.white,
+        child: BlocConsumer<UserCubit, UserState>(
+          listener: (context, state) {
+            if (state is Signin) {
+              FirebaseAuth.instance.signOut();
+              Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => const Login()));
+              CustomSnackBar(content: "Inscrit(e)", context: context)
+                  .showSnackBar();
+            } else if (state is SigningFailed) {
+              CustomSnackBar(
+                      content: "Une erreur est survenue, veuillez réésayer",
+                      context: context,
+                      isError: true)
+                  .showSnackBar();
+            }
+          },
+          builder: (context, state) {
+            return Padding(
+              padding: const EdgeInsets.all(20),
+              child: Center(
+                child: (state is Signing)
+                    ? const CustomProgressIndicator()
+                    : SingleChildScrollView(
+                        child: Form(
+                            key: _formKey,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                (selectedContent == null)
+                                    ? InkWell(
+                                        onTap: () => pickImage(),
+                                        child: Container(
+                                          width: 100,
+                                          height: 100,
+                                          decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                              shape: BoxShape.circle),
+                                        ),
+                                      )
+                                    : Container(
+                                        width: 100,
+                                        height: 100,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                image: FileImage(File(
+                                                    (selectedContent?.path)!)),
+                                                fit: BoxFit.cover)),
+                                      ),
+                                CustomTextField(
+                                  controller: nameController,
+                                  size: 14,
+                                  hintText: "Nom",
+                                  letterSpacing: false,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Veuillez remplir ce champ';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const Gap(horizontalAlign: false, gap: 10),
+                                CustomTextField(
+                                  controller: prenomController,
+                                  size: 14,
+                                  hintText: "Prénom",
+                                  letterSpacing: false,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Veuillez remplir ce champ';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const Gap(horizontalAlign: false, gap: 10),
+                                CustomTextField(
+                                  controller: mailController,
+                                  size: 14,
+                                  hintText: "Adresse mail",
+                                  letterSpacing: false,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Veuillez remplir ce champ';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const Gap(horizontalAlign: false, gap: 10),
+                                CustomTextField(
+                                  controller: passwordController1,
+                                  size: 14,
+                                  hintText: "Mot de passe",
+                                  letterSpacing: false,
+                                  password: true,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Veuillez entre un mot de passe';
+                                    } else if (value.length < 6) {
+                                      return 'Votre mot de passe doit dépasser 5 caractères';
+                                    } else if (passwordController1.text
+                                            .trim() !=
+                                        passwordController2.text.trim()) {
+                                      return "Les mots de passe doivent etre identitiques";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const Gap(horizontalAlign: false, gap: 10),
+                                CustomTextField(
+                                  controller: passwordController2,
+                                  size: 14,
+                                  hintText: "Confirmer le mot de passe",
+                                  letterSpacing: false,
+                                  password: true,
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Veuillez entre un mot de passe';
+                                    } else if (value.length < 6) {
+                                      return 'Votre mot de passe doit dépasser 5 caractères';
+                                    } else if (passwordController1.text
+                                            .trim() !=
+                                        passwordController2.text.trim()) {
+                                      return "Les mots de passe doivent etre identitiques";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const Gap(horizontalAlign: false, gap: 10),
+                                TextButton(
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      context.read<UserCubit>().signup(
+                                          nameController.text.trim(),
+                                          prenomController.text.trim(),
+                                          mailController.text.trim(),
+                                          File(selectedContent?.path ?? ""),
+                                          passwordController2.text.trim());
+                                    }
+                                  },
+                                  child: const GoogleText(
+                                    text: "S'inscrire",
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            )),
                       ),
-                    ),
-                  ],
-                )),
-          ),
+              ),
+            );
+          },
         ),
       ),
     );
@@ -169,7 +207,6 @@ class _SignInState extends State<SignIn> {
       setState(() {
         selectedContent = imageSelected;
       });
-
     } on PlatformException catch (e) {
       Logger().i('Failure to select the image: $e');
     }

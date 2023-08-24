@@ -93,6 +93,7 @@ class HashtagCubit extends Cubit<HashtagState> {
               label: "Tout",
               color: "#FFFFFF}",
               creationDate: DateTime.now(),
+              userId: ""
             ));
       }
       emit(HashTagsGotten(

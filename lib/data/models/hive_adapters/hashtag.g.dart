@@ -21,13 +21,14 @@ class HashTagAdapter extends TypeAdapter<HashTag> {
       label: fields[1] as String,
       color: fields[2] as String,
       creationDate: fields[3] as DateTime,
+      userId: fields[4] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, HashTag obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class HashTagAdapter extends TypeAdapter<HashTag> {
       ..writeByte(2)
       ..write(obj.color)
       ..writeByte(3)
-      ..write(obj.creationDate);
+      ..write(obj.creationDate)
+      ..writeByte(4)
+      ..write(obj.userId);
   }
 
   @override

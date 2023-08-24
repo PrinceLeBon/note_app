@@ -255,10 +255,12 @@ class _NewNoteState extends State<NewNote> {
                     final String color = ColorParser.color(pickerColor).toHex();
                     context.read<HashtagCubit>().addHashTag(
                         HashTag(
-                            id: DateTime.now().toString(),
-                            label: hashTagController.text.trim(),
-                            color: color,
-                            creationDate: DateTime.now()),
+                          id: DateTime.now().toString(),
+                          label: hashTagController.text.trim(),
+                          color: color,
+                          creationDate: DateTime.now(),
+                          userId: '',
+                        ),
                         hashTagsList,
                         hashTagsListFiltered);
                     hashTagController.text = "";

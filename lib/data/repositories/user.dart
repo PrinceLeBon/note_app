@@ -28,7 +28,20 @@ class UserRepository {
   Future<UserModel> getUserInfos() async {
     late UserModel user;
     try {
-      QuerySnapshot docs = await firestoreAPI.get("users");
+      final Box userBox = Hive.box("User");
+      UserModel userFromBox = userBox.get("user",
+          defaultValue: UserModel(
+              id: "id",
+              nom: "nom",
+              prenom: "prenom",
+              email: "email",
+              photo: "photo"));
+
+      QuerySnapshot docs = await firestoreAPI.get(
+          "users",
+          (userFromBox.id == "id")
+              ? (FirebaseAuth.instance.currentUser?.uid)!
+              : userFromBox.id);
 
       List<Map<String, dynamic>> result =
           docs.docs.map((e) => e.data() as Map<String, dynamic>).toList();
@@ -44,10 +57,15 @@ class UserRepository {
       String password) async {
     try {
       UserCredential userInfos = await userAPI.signup(mail, password);
-      Reference ref = await firestoreAPI.addFile(
-          "userprofiles", "${userInfos.user?.uid}.jpg", photo);
 
-      String photoPath = await ref.getDownloadURL();
+      String photoPath = "";
+
+      if (photo.path.isNotEmpty) {
+        Reference ref = await firestoreAPI.addFile(
+            "userprofiles", "${userInfos.user?.uid}.jpg", photo);
+
+        photoPath = await ref.getDownloadURL();
+      }
 
       UserModel user = UserModel(
         id: (userInfos.user?.uid)!,
@@ -60,6 +78,7 @@ class UserRepository {
 
       final Box userBox = Hive.box("User");
       userBox.put("user", user);
+      Logger().i(user);
     } catch (e) {
       Logger().e("UserRepository || Error while signup: $e");
       rethrow;

@@ -5,6 +5,7 @@ import 'package:note_app/business_logic/cubit/notes/note_cubit.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
 import 'package:note_app/presentation/widgets/hashtags.dart';
 import 'package:note_app/presentation/widgets/note.dart';
+import 'package:note_app/presentation/widgets/progress_indicator.dart';
 import '../../utils/constants.dart';
 import '../widgets/gap.dart';
 
@@ -59,9 +60,7 @@ class _FirstPageState extends State<FirstPage> {
                   );
                 }
                 return (state is GettingAllHashTags)
-                    ? CircularProgressIndicator(
-                        color: whiteColor,
-                      )
+                    ? const CustomProgressIndicator()
                     : (state is GettingAllHashTagsFailed)
                         ? Row(
                             children: [
@@ -106,9 +105,7 @@ class _FirstPageState extends State<FirstPage> {
                   );
                 }
                 return (state is GettingAllNotes)
-                    ? CircularProgressIndicator(
-                        color: whiteColor,
-                      )
+                    ? const CustomProgressIndicator()
                     : (state is GettingAllNotesFailed)
                         ? Row(
                             children: [
