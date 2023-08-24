@@ -31,6 +31,11 @@ class NoteRepository {
       List<Map<String, dynamic>> result =
           docs.docs.map((e) => e.data() as Map<String, dynamic>).toList();
       noteList = result.map<Note>((e) => Note.fromJson(e)).toList();
+
+      noteList.sort((a, b) => b.creationDate.compareTo(a.creationDate));
+
+      final Box notesBox = Hive.box("Notes");
+      notesBox.put("notesList", noteList);
     } catch (e) {
       Logger().e("NoteRepository || Error while getAllNotes: $e");
       rethrow;
@@ -55,6 +60,13 @@ class NoteRepository {
           (user.id == "id")
               ? (FirebaseAuth.instance.currentUser?.uid)!
               : user.id);
+
+      final Box notesBox = Hive.box("Notes");
+      List<Note> notesList =
+          List.castFrom(notesBox.get("notesList", defaultValue: []))
+              .cast<Note>();
+      notesList.add(note);
+      notesBox.put("notesList", notesList);
     } catch (e) {
       Logger().e("NoteRepository || Error while addDocs: $e");
       rethrow;

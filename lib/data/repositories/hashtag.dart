@@ -30,6 +30,12 @@ class HashTagRepository {
       List<Map<String, dynamic>> result =
           docs.docs.map((e) => e.data() as Map<String, dynamic>).toList();
       hashTagList = result.map<HashTag>((e) => HashTag.fromJson(e)).toList();
+
+      hashTagList.sort((a, b) => b.creationDate.compareTo(a.creationDate));
+
+      final Box noteBox = Hive.box("Notes");
+      noteBox.put("hashTagsList", hashTagList);
+
     } catch (e) {
       Logger().e("HashTagRepository || Error while getAllHashTags: $e");
       rethrow;

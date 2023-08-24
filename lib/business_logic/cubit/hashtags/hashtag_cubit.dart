@@ -21,8 +21,9 @@ class HashtagCubit extends Cubit<HashtagState> {
       hashTagsList.add(hashTag);
       noteBox.put("hashTagsList", hashTagsList);
       emit(HashTagsAdded());
-      getHashTags(hashTagsListFiltered);
+      await getHashTags(hashTagsListFiltered);
       getHashTagsNew(hashTagsListFiltered);
+      Logger().i("ee");
     } catch (e) {
       emit(AddingHashTagFailed(error: "Error: $e"));
     }
@@ -62,7 +63,6 @@ class HashtagCubit extends Cubit<HashtagState> {
           .where((element) => element.label == label)
           .toList()
           .isEmpty) {
-        Logger().i("ee");
         hashTagsListFiltered.add(hashTagsList
             .where((element) => element.label == label)
             .toList()[0]);
@@ -78,8 +78,8 @@ class HashtagCubit extends Cubit<HashtagState> {
   Future<void> getHashTags([List<HashTag>? hashTagsListFiltered]) async {
     try {
       emit(GettingAllHashTags());
-      List<HashTag> hashTagsListFromFiresore =
-          await hashTagRepository.getAllHashTags();
+      /*List<HashTag> hashTagsListFromFiresore =*/
+      await hashTagRepository.getAllHashTags();
       final Box noteBox = Hive.box("Notes");
       List<HashTag> hashTagsList =
           List.castFrom(noteBox.get("hashTagsList", defaultValue: []))
@@ -89,12 +89,11 @@ class HashtagCubit extends Cubit<HashtagState> {
         hashTagsList.insert(
             0,
             HashTag(
-              id: "id",
-              label: "Tout",
-              color: "#FFFFFF}",
-              creationDate: DateTime.now(),
-              userId: ""
-            ));
+                id: "id",
+                label: "Tout",
+                color: "#FFFFFF}",
+                creationDate: DateTime.now(),
+                userId: ""));
       }
       emit(HashTagsGotten(
           hashTags: hashTagsList,

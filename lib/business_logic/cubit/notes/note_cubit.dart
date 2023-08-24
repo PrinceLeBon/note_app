@@ -15,12 +15,6 @@ class NoteCubit extends Cubit<NoteState> {
     try {
       emit(AddingNote());
       await noteRepository.addDocs(note);
-      final Box notesBox = Hive.box("Notes");
-      List<Note> notesList =
-          List.castFrom(notesBox.get("notesList", defaultValue: []))
-              .cast<Note>();
-      notesList.add(note);
-      notesBox.put("notesList", notesList);
       emit(NotesAdded());
       getNotes();
     } catch (e) {
@@ -31,7 +25,8 @@ class NoteCubit extends Cubit<NoteState> {
   Future<void> getNotes() async {
     try {
       emit(GettingAllNotes());
-      List<Note> notesListFromFirestore = await noteRepository.getAllNotes();
+      /*List<Note> notesListFromFirestore =*/
+      await noteRepository.getAllNotes();
       final Box noteBox = Hive.box("Notes");
       List<Note> notesList =
           List.castFrom(noteBox.get("notesList", defaultValue: []))
