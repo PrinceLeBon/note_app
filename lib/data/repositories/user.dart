@@ -25,6 +25,15 @@ class UserRepository {
     return user;
   }
 
+  Future logout() async {
+    try {
+      await userAPI.logout();
+    } catch (e) {
+      Logger().e("UserRepository || Error while logout: $e");
+      rethrow;
+    }
+  }
+
   Future<UserModel> getUserInfos() async {
     late UserModel user;
     try {

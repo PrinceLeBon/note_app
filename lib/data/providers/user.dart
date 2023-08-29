@@ -11,6 +11,10 @@ class UserAPI {
         .signInWithEmailAndPassword(email: email, password: password);
   }
 
+  Future logout() async {
+    return await FirebaseAuth.instance.signOut();
+  }
+
   Future<UserCredential> signup(String mail, String password) async {
     return await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: mail, password: password);

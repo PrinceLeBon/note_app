@@ -21,6 +21,16 @@ class Logged extends UserState {
   const Logged({required this.user});
 }
 
+class LoggingOut extends UserState {}
+
+class LoggingOutFailed extends UserState {
+  final String error;
+
+  const LoggingOutFailed({required this.error});
+}
+
+class Logout extends UserState {}
+
 class Signing extends UserState {}
 
 class SigningFailed extends UserState {

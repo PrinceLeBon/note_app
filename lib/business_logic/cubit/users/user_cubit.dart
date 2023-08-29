@@ -23,6 +23,17 @@ class UserCubit extends Cubit<UserState> {
     }
   }
 
+  Future logout() async {
+    emit(LoggingOut());
+    try {
+      await userRepository.logout();
+      emit(Logout());
+    } catch (e) {
+      Logger().e("USER CUBIT || Error while logout: $e");
+      emit(LoggingFailed(error: "USER CUBIT || Error while logout: $e"));
+    }
+  }
+
   Future signup(String nom, String prenom, String mail, File photo,
       String password) async {
     emit(Signing());

@@ -38,6 +38,7 @@ class _NewNoteState extends State<NewNote> {
             Icons.arrow_back_ios_new,
           ),
           onTap: () {
+            context.read<HashtagCubit>().getHashTags();
             Navigator.of(context).pop();
           },
         ),
