@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:note_app/presentation/screens/homepage.dart';
 import 'package:note_app/presentation/screens/transition.dart';
 
 class SplashScreen extends StatefulWidget {

@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_app/business_logic/cubit/users/user_cubit.dart';
 import 'package:note_app/presentation/screens/signin.dart';
 import 'package:note_app/presentation/screens/splash_screen.dart';
-import 'package:note_app/presentation/widgets/customSnackBar.dart';
 import 'package:note_app/presentation/widgets/custom_text_field.dart';
 import 'package:note_app/presentation/widgets/gap.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
+import '../widgets/custom_snack_bar.dart';
 import '../widgets/progress_indicator.dart';
 
 class Login extends StatefulWidget {

@@ -1,19 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/logger.dart';
 import 'package:note_app/business_logic/cubit/hashtags/hashtag_cubit.dart';
 import 'package:note_app/business_logic/cubit/users/user_cubit.dart';
 import 'package:note_app/data/models/user.dart';
 import 'package:note_app/presentation/screens/firstpage.dart';
 import 'package:note_app/presentation/screens/new_note.dart';
-import 'package:note_app/presentation/widgets/customSnackBar.dart';
 import 'package:note_app/presentation/widgets/custom_drawer.dart';
 import 'package:note_app/presentation/widgets/custom_text_field.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
 import 'package:note_app/presentation/widgets/progress_indicator.dart';
 import '../../business_logic/cubit/notes/note_cubit.dart';
 import '../../utils/constants.dart';
+import '../widgets/custom_snack_bar.dart';
 import '../widgets/gap.dart';
 import 'login.dart';
 
