@@ -4,7 +4,6 @@ import 'package:hive/hive.dart';
 import 'package:logger/logger.dart';
 import 'package:note_app/data/models/note.dart';
 import 'package:note_app/data/providers/firestore.dart';
-
 import '../models/user.dart';
 
 class NoteRepository {
@@ -66,6 +65,22 @@ class NoteRepository {
           List.castFrom(notesBox.get("notesList", defaultValue: []))
               .cast<Note>();
       notesList.add(note);
+      notesBox.put("notesList", notesList);
+    } catch (e) {
+      Logger().e("NoteRepository || Error while addDocs: $e");
+      rethrow;
+    }
+  }
+
+  Future deleteDocs(String docId) async {
+    try {
+      await firestoreAPI.deleteDocs("notes", docId);
+
+      final Box notesBox = Hive.box("Notes");
+      List<Note> notesList =
+          List.castFrom(notesBox.get("notesList", defaultValue: []))
+              .cast<Note>();
+      notesList.removeWhere((note) => note.id == docId);
       notesBox.put("notesList", notesList);
     } catch (e) {
       Logger().e("NoteRepository || Error while addDocs: $e");

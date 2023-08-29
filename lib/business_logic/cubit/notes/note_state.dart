@@ -31,3 +31,13 @@ class AddingNoteFailed extends NoteState {
 
   const AddingNoteFailed({required this.error});
 }
+
+class DeletingNote extends NoteState {}
+
+class NotesDeleted extends NoteState {}
+
+class DeletingNoteFailed extends NoteState {
+  final String error;
+
+  const DeletingNoteFailed({required this.error});
+}

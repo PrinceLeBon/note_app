@@ -31,6 +31,13 @@ class FirestoreAPI {
         (error, stackTrace) => Logger().e("Error writing document: $error"));
   }
 
+  Future deleteDocs(String collectionName, String docId) async {
+    await FirebaseFirestore.instance
+        .collection(collectionName)
+        .doc(docId)
+        .delete();
+  }
+
   Future<Reference> addFile(String folder, String name, File file) async {
     final ref = FirebaseStorage.instance.ref().child(folder).child(name);
     await ref.putFile(file);

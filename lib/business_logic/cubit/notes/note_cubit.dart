@@ -22,10 +22,20 @@ class NoteCubit extends Cubit<NoteState> {
     }
   }
 
+  Future<void> deleteNote(String docId) async {
+    try {
+      emit(DeletingNote());
+      await noteRepository.deleteDocs(docId);
+      emit(NotesDeleted());
+      getNotes();
+    } catch (e) {
+      emit(DeletingNoteFailed(error: "Error: $e"));
+    }
+  }
+
   Future<void> getNotes() async {
     try {
       emit(GettingAllNotes());
-      /*List<Note> notesListFromFirestore =*/
       await noteRepository.getAllNotes();
       final Box noteBox = Hive.box("Notes");
       List<Note> notesList =
