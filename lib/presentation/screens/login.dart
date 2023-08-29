@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_app/business_logic/cubit/users/user_cubit.dart';
 import 'package:note_app/presentation/screens/signin.dart';
+import 'package:note_app/presentation/screens/splash_screen.dart';
 import 'package:note_app/presentation/widgets/customSnackBar.dart';
 import 'package:note_app/presentation/widgets/custom_text_field.dart';
 import 'package:note_app/presentation/widgets/gap.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
-
 import '../widgets/progress_indicator.dart';
 
 class Login extends StatefulWidget {
@@ -34,7 +34,10 @@ class _LoginState extends State<Login> {
       body: BlocConsumer<UserCubit, UserState>(
         listener: (context, state) {
           if (state is Logged) {
-            Navigator.of(context).popUntil((route) => route.isFirst);
+            Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) {
+              return const SplashScreen();
+            }), (route) => false);
             CustomSnackBar(content: "Connecté(e)", context: context)
                 .showSnackBar();
           } else if (state is LoggingFailed) {

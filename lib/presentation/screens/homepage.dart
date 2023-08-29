@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:note_app/business_logic/cubit/hashtags/hashtag_cubit.dart';
 import 'package:note_app/business_logic/cubit/users/user_cubit.dart';
+import 'package:note_app/data/models/user.dart';
 import 'package:note_app/presentation/screens/firstpage.dart';
 import 'package:note_app/presentation/screens/new_note.dart';
 import 'package:note_app/presentation/widgets/customSnackBar.dart';
@@ -16,7 +18,9 @@ import '../widgets/gap.dart';
 import 'login.dart';
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+  final UserModel user;
+
+  const MyHomePage({super.key, required this.user});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -42,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
       builder: (context, state) {
         return Scaffold(
           key: _scaffoldKey,
-          drawer: const CustomDrawer(),
+          drawer: CustomDrawer(user: widget.user),
           appBar: AppBar(
             leading: InkWell(
               onTap: () {
@@ -50,9 +54,9 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: CircleAvatar(
                 backgroundColor: whiteColor,
-                child: (state is Logged && state.user.photo.isNotEmpty)
+                child: (widget.user.photo.isNotEmpty)
                     ? CachedNetworkImage(
-                        imageUrl: state.user.photo,
+                        imageUrl: widget.user.photo,
                         fit: BoxFit.cover,
                       )
                     : null,
@@ -70,9 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             researchController.text.trim().toLowerCase()),
                   )
                 : BlocBuilder<UserCubit, UserState>(builder: (context, state) {
-                    return GoogleText(
-                        text:
-                            "Hi ${(state is Logged) ? ", ${state.user.prenom}" : ""}");
+                    return GoogleText(text: "Hi ,${widget.user.prenom}");
                   }),
             elevation: 0,
             actions: [

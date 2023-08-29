@@ -80,6 +80,9 @@ class _SignInState extends State<SignIn> {
                                           decoration: const BoxDecoration(
                                               color: Colors.white,
                                               shape: BoxShape.circle),
+                                          child: const Center(
+                                            child: Icon(Icons.camera_alt),
+                                          ),
                                         ),
                                       )
                                     : Container(
@@ -93,6 +96,12 @@ class _SignInState extends State<SignIn> {
                                                     (selectedContent?.path)!)),
                                                 fit: BoxFit.cover)),
                                       ),
+                                const Gap(horizontalAlign: false, gap: 20),
+                                const GoogleText(
+                                  text: "Photo de profil",
+                                  color: Color(0xff848181),
+                                ),
+                                const Gap(horizontalAlign: false, gap: 10),
                                 CustomTextField(
                                   controller: nameController,
                                   size: 14,

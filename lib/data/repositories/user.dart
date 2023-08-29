@@ -28,6 +28,8 @@ class UserRepository {
   Future logout() async {
     try {
       await userAPI.logout();
+      final Box userBox = Hive.box("User");
+      userBox.delete("user");
     } catch (e) {
       Logger().e("UserRepository || Error while logout: $e");
       rethrow;
@@ -38,13 +40,15 @@ class UserRepository {
     late UserModel user;
     try {
       final Box userBox = Hive.box("User");
-      UserModel userFromBox = userBox.get("user",
-          defaultValue: UserModel(
-              id: "id",
-              nom: "nom",
-              prenom: "prenom",
-              email: "email",
-              photo: "photo"));
+      UserModel userFromBox = userBox.get(
+        "user",
+        defaultValue: UserModel(
+            id: "id",
+            nom: "nom",
+            prenom: "prenom",
+            email: "email",
+            photo: "photo"),
+      );
 
       QuerySnapshot docs = await firestoreAPI.get(
           "users",
@@ -55,6 +59,7 @@ class UserRepository {
       List<Map<String, dynamic>> result =
           docs.docs.map((e) => e.data() as Map<String, dynamic>).toList();
       user = result.map<UserModel>((e) => UserModel.fromJson(e)).toList().first;
+      userBox.put("user", user);
     } catch (e) {
       Logger().e("UserRepository || Error while getUserInfos: $e");
       rethrow;

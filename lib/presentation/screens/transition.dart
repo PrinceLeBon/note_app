@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:hive/hive.dart';
+import '../../data/models/user.dart';
 import '../widgets/progress_indicator.dart';
 import 'homepage.dart';
 import 'login.dart';
@@ -19,7 +21,15 @@ class TransitionPage extends StatelessWidget {
           } else if (snapshot.hasError) {
             return Text('Something has wrong! ${snapshot.error}');
           } else if (snapshot.hasData) {
-            return const MyHomePage();
+            final Box userBox = Hive.box("User");
+            UserModel userFromBox = userBox.get("user",
+                defaultValue: UserModel(
+                    id: "id",
+                    nom: "nom",
+                    prenom: "prenom",
+                    email: "email",
+                    photo: "photo"));
+            return MyHomePage(user: userFromBox);
           } else {
             return const Login();
           }

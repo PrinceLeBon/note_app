@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_app/presentation/widgets/gap.dart';
 import '../../business_logic/cubit/users/user_cubit.dart';
+import '../../data/models/user.dart';
 import '../../utils/constants.dart';
 import 'google_text.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+  final UserModel user;
+
+  const CustomDrawer({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -18,33 +21,28 @@ class CustomDrawer extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BlocBuilder<UserCubit, UserState>(
-              builder: (context, state) {
-                return Column(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: whiteColor,
-                      child: (state is Logged && state.user.photo.isNotEmpty)
-                          ? CachedNetworkImage(
-                              imageUrl: state.user.photo,
-                              fit: BoxFit.cover,
-                            )
-                          : null,
-                    ),
-                    const Gap(horizontalAlign: false, gap: 10),
-                    GoogleText(
-                        text: (state is Logged)
-                            ? "${state.user.prenom} ${state.user.nom}"
-                            : "")
-                  ],
-                );
-              },
+            const Gap(horizontalAlign: false, gap: 10),
+            Column(
+              children: [
+                CircleAvatar(
+                  backgroundColor: whiteColor,
+                  child: (user.photo.isNotEmpty)
+                      ? CachedNetworkImage(
+                          imageUrl: user.photo,
+                          fit: BoxFit.cover,
+                        )
+                      : null,
+                ),
+                const Gap(horizontalAlign: false, gap: 10),
+                GoogleText(text: "${user.prenom} ${user.nom}")
+              ],
             ),
             const Gap(horizontalAlign: false, gap: 10),
             Container(
               height: 1,
               color: Colors.white,
             ),
+            const Gap(horizontalAlign: false, gap: 10),
             InkWell(
               child: const GoogleText(
                 text: "Déconnexion",
@@ -52,7 +50,6 @@ class CustomDrawer extends StatelessWidget {
               ),
               onTap: () {
                 context.read<UserCubit>().logout();
-
               },
             )
           ],
