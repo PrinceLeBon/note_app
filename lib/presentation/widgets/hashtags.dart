@@ -13,8 +13,14 @@ class Hashtags extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 12),
       child: Chip(
-        label: GoogleText(text: "#${hashtag.label}"),
+        label: GoogleText(
+          text: "#${hashtag.label}",
+          color: blackColor,
+        ),
         backgroundColor: hexToColor(hashtag.color),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+            side: const BorderSide(color: Colors.transparent)),
       ),
     );
   }

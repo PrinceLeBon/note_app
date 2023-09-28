@@ -92,7 +92,7 @@ class UserRepository {
 
       final Box userBox = Hive.box("User");
       userBox.put("user", user);
-      Logger().i(user);
+      //Logger().i(user);
     } catch (e) {
       Logger().e("UserRepository || Error while signup: $e");
       rethrow;

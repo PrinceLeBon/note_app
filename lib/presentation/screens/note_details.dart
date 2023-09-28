@@ -8,6 +8,7 @@ import 'package:note_app/presentation/widgets/google_text.dart';
 import 'package:note_app/presentation/widgets/hashtags.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../data/models/hashtag.dart';
+import '../../utils/constants.dart';
 
 class NoteView extends StatelessWidget {
   final Note note;
@@ -19,8 +20,9 @@ class NoteView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_ios_new,
+            color: whiteColor,
           ),
           onTap: () {
             Navigator.of(context).pop();
@@ -56,7 +58,7 @@ class NoteView extends StatelessWidget {
                 options: const LinkifyOptions(humanize: false),
                 text: note.note.isEmpty ? "Aucun contenu" : note.note,
                 style: GoogleFonts.poppins(
-                  fontSize: 14,
+                  fontSize: 16,
                 ),
               )
             ],

@@ -51,12 +51,14 @@ class _MyHomePageState extends State<MyHomePage> {
               onTap: () {
                 _scaffoldKey.currentState?.openDrawer();
               },
-              child: CircleAvatar(
-                backgroundColor: whiteColor,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10000.0),
                 child: (widget.user.photo.isNotEmpty)
                     ? CachedNetworkImage(
                         imageUrl: widget.user.photo,
                         fit: BoxFit.cover,
+                        width: 50,
+                        height: 50,
                       )
                     : null,
               ),

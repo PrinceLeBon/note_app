@@ -15,6 +15,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      backgroundColor: blackColor,
       child: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(12),
@@ -24,8 +25,8 @@ class CustomDrawer extends StatelessWidget {
             const Gap(horizontalAlign: false, gap: 10),
             Column(
               children: [
-                CircleAvatar(
-                  backgroundColor: whiteColor,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10000.0),
                   child: (user.photo.isNotEmpty)
                       ? CachedNetworkImage(
                           imageUrl: user.photo,
@@ -34,7 +35,7 @@ class CustomDrawer extends StatelessWidget {
                       : null,
                 ),
                 const Gap(horizontalAlign: false, gap: 10),
-                GoogleText(text: "${user.prenom} ${user.nom}")
+                GoogleText(text: "${user.prenom} ${user.nom}", fontSize: 18,fontWeight: true,)
               ],
             ),
             const Gap(horizontalAlign: false, gap: 10),

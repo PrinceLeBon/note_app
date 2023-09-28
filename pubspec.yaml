@@ -31,7 +31,7 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   color_parser: ^0.0.3
   google_fonts: ^4.0.3
-  cached_network_image: ^3.2.3
+  cached_network_image: ^3.3.0
   firebase_core: ^2.15.0
   cloud_firestore: ^4.8.4
   firebase_storage: ^11.2.5

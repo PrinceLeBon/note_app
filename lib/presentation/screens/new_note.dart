@@ -34,13 +34,20 @@ class _NewNoteState extends State<NewNote> {
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back_ios_new,
+            color: whiteColor,
           ),
           onTap: () {
             context.read<HashtagCubit>().getHashTags();
             Navigator.of(context).pop();
           },
+        ),
+        title: GoogleText(
+          text: "Ajouter une note",
+          fontWeight: true,
+          fontSize: 18,
+          color: whiteColor,
         ),
         actions: [
           BlocBuilder<HashtagCubit, HashtagState>(
@@ -73,7 +80,10 @@ class _NewNoteState extends State<NewNote> {
                   }
                 },
                 hoverColor: Colors.transparent,
-                child: const Icon(Icons.save),
+                child: Icon(
+                  Icons.save,
+                  color: whiteColor,
+                ),
               );
             },
           ),
@@ -283,7 +293,10 @@ class _NewNoteState extends State<NewNote> {
                     Navigator.of(context).pop();
                   }
                 },
-                child: const GoogleText(text: "Valider"),
+                child: GoogleText(
+                  text: "Valider",
+                  color: whiteColor,
+                ),
               ),
             ],
           );
