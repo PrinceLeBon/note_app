@@ -14,7 +14,7 @@ import '../../business_logic/cubit/notes/note_cubit.dart';
 import '../../utils/constants.dart';
 import '../widgets/custom_snack_bar.dart';
 import '../widgets/gap.dart';
-import 'login.dart';
+import 'connexion/login.dart';
 
 class MyHomePage extends StatefulWidget {
   final UserModel user;

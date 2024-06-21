@@ -4,7 +4,7 @@ import 'package:hive/hive.dart';
 import '../../data/models/user.dart';
 import '../widgets/progress_indicator.dart';
 import 'homepage.dart';
-import 'login.dart';
+import 'connexion/login.dart';
 
 class TransitionPage extends StatelessWidget {
   const TransitionPage({super.key});

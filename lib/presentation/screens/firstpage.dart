@@ -1,11 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
 import 'package:note_app/business_logic/cubit/hashtags/hashtag_cubit.dart';
 import 'package:note_app/business_logic/cubit/notes/note_cubit.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
 import 'package:note_app/presentation/widgets/hashtags.dart';
 import 'package:note_app/presentation/widgets/note.dart';
 import 'package:note_app/presentation/widgets/progress_indicator.dart';
+import '../../data/models/note.dart';
 import '../../utils/constants.dart';
 import '../widgets/gap.dart';
 
@@ -86,6 +89,38 @@ class _FirstPageState extends State<FirstPage> {
               },
             ),
             const Gap(horizontalAlign: false, gap: 10),
+            /*StreamBuilder(
+                stream: FirebaseFirestore.instance
+                    .collection("notes")
+                    .where("userId", isEqualTo: "0mmVDWRtSse1wxdjxQA8sTUfHyn1")
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CustomProgressIndicator();
+                  } else if (snapshot.hasData) {
+                    List<Note> result = snapshot.data?.docs
+                            .map((element) => Note.fromJson(element.data()))
+                            .toList() ??
+                        [];
+                    result.sort(
+                        (a, b) => b.creationDate.compareTo(a.creationDate));
+                    return (result.isNotEmpty)
+                        ? ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: result.length,
+                            itemBuilder: (context, index) {
+                              return NoteCard(
+                                note: result[index],
+                              );
+                            })
+                        : const Center(
+                            child: GoogleText(
+                                text: "Vous n'avez pas encore de notes"),
+                          );
+                  }
+                  return Container();
+                }),*/
             BlocBuilder<NoteCubit, NoteState>(
               builder: (context, state) {
                 if (state is NotesGotten) {

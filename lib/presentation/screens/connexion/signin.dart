@@ -5,12 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import '../../business_logic/cubit/users/user_cubit.dart';
-import '../widgets/custom_snack_bar.dart';
-import '../widgets/custom_text_field.dart';
-import '../widgets/gap.dart';
-import '../widgets/google_text.dart';
-import '../widgets/progress_indicator.dart';
+import '../../../business_logic/cubit/users/user_cubit.dart';
+import '../../widgets/custom_snack_bar.dart';
+import '../../widgets/custom_text_field.dart';
+import '../../widgets/gap.dart';
+import '../../widgets/google_text.dart';
+import '../../widgets/progress_indicator.dart';
 import 'login.dart';
 
 class SignIn extends StatefulWidget {
