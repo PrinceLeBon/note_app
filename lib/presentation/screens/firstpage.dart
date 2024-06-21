@@ -59,7 +59,7 @@ class _FirstPageState extends State<FirstPage> {
                   }
                   return const Center(
                     child:
-                        GoogleText(text: "Vous n'avez pas encore de hashtags"),
+                        GoogleText(text: " Vous n'avez pas encore de hashtags"),
                   );
                 }
                 return (state is GettingAllHashTags)
