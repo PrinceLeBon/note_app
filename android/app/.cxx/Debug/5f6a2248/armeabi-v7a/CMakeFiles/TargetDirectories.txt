@@ -1,0 +1,2 @@
+/Users/amen/StudioProjects/note_app/android/app/.cxx/Debug/5f6a2248/armeabi-v7a/CMakeFiles/edit_cache.dir
+/Users/amen/StudioProjects/note_app/android/app/.cxx/Debug/5f6a2248/armeabi-v7a/CMakeFiles/rebuild_cache.dir
