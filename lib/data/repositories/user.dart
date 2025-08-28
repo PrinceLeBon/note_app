@@ -98,4 +98,63 @@ class UserRepository {
       rethrow;
     }
   }
+
+  Future<UserModel> updateUser(UserModel updatedUser, File? newPhoto) async {
+    try {
+      // Check if user is authenticated
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser == null) {
+        throw Exception("User not authenticated");
+      }
+      
+      // Ensure the user is updating their own profile
+      if (currentUser.uid != updatedUser.id) {
+        throw Exception("User can only update their own profile");
+      }
+      
+      String photoUrl = updatedUser.photo;
+      
+      // If new photo provided, upload it
+      if (newPhoto != null && newPhoto.path.isNotEmpty) {
+        try {
+          // Use a timestamp to avoid caching issues
+          final timestamp = DateTime.now().millisecondsSinceEpoch;
+          Reference ref = await firestoreAPI.addFile(
+              "userprofiles", "${updatedUser.id}_$timestamp.jpg", newPhoto);
+          photoUrl = await ref.getDownloadURL();
+        } catch (storageError) {
+          Logger().e("Storage error: $storageError");
+          // If storage fails, continue with profile update without photo
+          throw Exception("Erreur lors du téléchargement de la photo. Vérifiez vos permissions Firebase Storage.");
+        }
+      }
+      
+      // Create updated user with new photo URL if changed
+      UserModel userToUpdate = updatedUser.copyWith(photo: photoUrl);
+      
+      // Update in Firestore
+      await firestoreAPI.updateDocs(
+          "users", updatedUser.id, userToUpdate.toJson(), updatedUser.id);
+      
+      // Update in local Hive storage
+      final Box userBox = Hive.box("User");
+      userBox.put("user", userToUpdate);
+      
+      return userToUpdate;
+    } catch (e) {
+      Logger().e("UserRepository || Error while updating user: $e");
+      rethrow;
+    }
+  }
+
+  UserModel? getCurrentUser() {
+    try {
+      final Box userBox = Hive.box("User");
+      UserModel? user = userBox.get("user");
+      return user;
+    } catch (e) {
+      Logger().e("UserRepository || Error while getting current user: $e");
+      return null;
+    }
+  }
 }

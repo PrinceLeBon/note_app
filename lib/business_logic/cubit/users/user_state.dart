@@ -40,3 +40,17 @@ class SigningFailed extends UserState {
 }
 
 class Signin extends UserState {}
+
+class UpdatingUser extends UserState {}
+
+class UserUpdated extends UserState {
+  final UserModel user;
+
+  const UserUpdated({required this.user});
+}
+
+class UpdatingUserFailed extends UserState {
+  final String error;
+
+  const UpdatingUserFailed({required this.error});
+}

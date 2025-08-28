@@ -45,4 +45,24 @@ class UserCubit extends Cubit<UserState> {
       emit(SigningFailed(error: "USER CUBIT || Error while signup: $e"));
     }
   }
+
+  Future updateUser(UserModel updatedUser, File? newPhoto) async {
+    emit(UpdatingUser());
+    try {
+      final UserModel user = await userRepository.updateUser(updatedUser, newPhoto);
+      emit(UserUpdated(user: user));
+    } catch (e) {
+      Logger().e("USER CUBIT || Error while updating user: $e");
+      emit(UpdatingUserFailed(error: "USER CUBIT || Error while updating user: $e"));
+    }
+  }
+
+  UserModel? getCurrentUser() {
+    try {
+      return userRepository.getCurrentUser();
+    } catch (e) {
+      Logger().e("USER CUBIT || Error while getting current user: $e");
+      return null;
+    }
+  }
 }

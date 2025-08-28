@@ -30,4 +30,16 @@ class GoogleText extends StatelessWidget {
       maxLines: card ? 1 : null,
     );
   }
+
+  static TextStyle getStyle({
+    bool fontWeight = false,
+    double fontSize = 14,
+    Color? color,
+  }) {
+    return GoogleFonts.poppins(
+      fontWeight: fontWeight ? FontWeight.w600 : null,
+      fontSize: fontSize,
+      color: color,
+    );
+  }
 }

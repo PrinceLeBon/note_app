@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:note_app/business_logic/cubit/hashtags/hashtag_cubit.dart';
 import 'package:note_app/business_logic/cubit/notes/note_cubit.dart';
+import 'package:note_app/business_logic/cubit/theme/theme_cubit.dart';
 import 'package:note_app/business_logic/cubit/users/user_cubit.dart';
 import 'package:note_app/data/models/hashtag.dart';
 import 'package:note_app/data/models/note.dart';
@@ -11,7 +12,7 @@ import 'package:note_app/data/repositories/hashtag.dart';
 import 'package:note_app/data/repositories/note.dart';
 import 'package:note_app/data/repositories/user.dart';
 import 'package:note_app/presentation/screens/splash_screen.dart';
-import 'package:note_app/utils/constants.dart';
+import 'package:note_app/utils/app_theme.dart';
 import 'data/models/user.dart';
 
 void main() async {
@@ -42,6 +43,9 @@ class MyApp extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
+          BlocProvider<ThemeCubit>(
+            create: (BuildContext context) => ThemeCubit(),
+          ),
           BlocProvider<NoteCubit>(
             create: (BuildContext context) => NoteCubit(
                 noteRepository: RepositoryProvider.of<NoteRepository>(context))
@@ -58,22 +62,18 @@ class MyApp extends StatelessWidget {
                 userRepository: RepositoryProvider.of<UserRepository>(context)),
           ),
         ],
-        child: MaterialApp(
-
-          theme: ThemeData(
-            canvasColor: blackColor,
-            scaffoldBackgroundColor: blackColor,
-            appBarTheme: AppBarTheme(
-              color: blackColor,
-            ),
-            textTheme: Theme.of(context).textTheme.apply(
-                  bodyColor: whiteColor,
-                  displayColor: whiteColor,
-                ),
-          ),
-          debugShowCheckedModeBanner: false,
-          debugShowMaterialGrid: false,
-          home: const SplashScreen(),
+        child: BlocBuilder<ThemeCubit, ThemeState>(
+          builder: (context, themeState) {
+            return MaterialApp(
+              title: 'Note App',
+              theme: AppTheme.lightTheme,
+              darkTheme: AppTheme.darkTheme,
+              themeMode: themeState.themeMode,
+              debugShowCheckedModeBanner: false,
+              debugShowMaterialGrid: false,
+              home: const SplashScreen(),
+            );
+          },
         ),
       ),
     );
