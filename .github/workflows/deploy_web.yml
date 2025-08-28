@@ -1,0 +1,36 @@
+name: Deploy Flutter Web
+
+on:
+  push:
+    branches:
+      - main   # chaque push sur main déclenche le build
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 'stable'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build web
+        run: flutter build web
+
+      - name: Deploy to web branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan web
+          git rm -rf .
+          cp -r build/web/* .
+          git add .
+          git commit -m "Automated web build from commit $GITHUB_SHA"
+          git push -f origin web

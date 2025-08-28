@@ -59,6 +59,7 @@ class MyApp extends StatelessWidget {
           ),
         ],
         child: MaterialApp(
+
           theme: ThemeData(
             canvasColor: blackColor,
             scaffoldBackgroundColor: blackColor,
