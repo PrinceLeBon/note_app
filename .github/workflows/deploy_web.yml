@@ -3,16 +3,18 @@ name: Deploy Flutter Web
 on:
   push:
     branches:
-      - main  # Déclenche le workflow à chaque push sur main
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Récupérer le code source
+      # 1️⃣ Checkout
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          persist-credentials: false
 
       # 2️⃣ Installer Flutter
       - name: Set up Flutter
@@ -24,33 +26,25 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      # 4️⃣ Build Flutter Web
+      # 4️⃣ Build web
       - name: Build web
         run: flutter build web --release
 
-      # 5️⃣ Déployer sur la branche web
+      # 5️⃣ Déployer sur web
       - name: Deploy to web branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Config Git
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Crée une branche orpheline web (si elle n'existe pas)
           git checkout --orphan web
-
-          # Supprime l'ancien contenu
           git rm -rf .
-
-          # Copie le nouveau build
           cp -r build/web/* .
-
-          # Commit et push via token pour éviter le 403
           git add .
           git commit -m "Automated web build from commit $GITHUB_SHA"
           git push -f https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} web
 
-      # 6️⃣ Retour sur la branche précédente (optionnel)
+      # 6️⃣ Retour sur main
       - name: Checkout back
         run: git checkout -
