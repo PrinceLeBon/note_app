@@ -7,8 +7,10 @@ import 'package:note_app/presentation/widgets/gap.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
 import 'package:note_app/presentation/widgets/hashtags.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../../data/models/hashtag.dart';
 import '../../utils/constants.dart';
+import 'edit_note.dart';
 
 class NoteView extends StatelessWidget {
   final Note note;
@@ -28,6 +30,26 @@ class NoteView extends StatelessWidget {
             Navigator.of(context).pop();
           },
         ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.edit,
+              color: whiteColor,
+            ),
+            onPressed: () {
+              Navigator.of(context)
+                  .push(
+                MaterialPageRoute(
+                  builder: (context) => EditNoteScreen(note: note),
+                ),
+              )
+                  .then((_) {
+                // Refresh the page when returning from edit screen
+                Navigator.of(context).pop();
+              });
+            },
+          ),
+        ],
         elevation: 0,
       ),
       body: Padding(

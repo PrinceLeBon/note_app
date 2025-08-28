@@ -48,4 +48,22 @@ class Note {
           DateTime.fromMillisecondsSinceEpoch(json['creationDate']),
     );
   }
+
+  Note copyWith({
+    String? id,
+    List<String>? hashtagsId,
+    String? userId,
+    String? title,
+    String? note,
+    DateTime? creationDate,
+  }) {
+    return Note(
+      id: id ?? this.id,
+      hashtagsId: hashtagsId ?? this.hashtagsId,
+      userId: userId ?? this.userId,
+      title: title ?? this.title,
+      note: note ?? this.note,
+      creationDate: creationDate ?? this.creationDate,
+    );
+  }
 }

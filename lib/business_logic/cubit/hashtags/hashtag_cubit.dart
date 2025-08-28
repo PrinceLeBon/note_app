@@ -118,4 +118,17 @@ class HashtagCubit extends Cubit<HashtagState> {
       emit(GettingAllHashTagsNewFailed(error: "Error: $e"));
     }
   }
+
+  void setFilteredHashtags(List<HashTag> filteredHashtags) {
+    try {
+      if (state is HashTagsNewGotten) {
+        final currentState = state as HashTagsNewGotten;
+        emit(HashTagsNewGotten(
+            hashTags: currentState.hashTags,
+            hashTagsFiltered: filteredHashtags));
+      }
+    } catch (e) {
+      Logger().e("Error setting filtered hashtags: $e");
+    }
+  }
 }

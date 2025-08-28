@@ -85,4 +85,15 @@ class NoteCubit extends Cubit<NoteState> {
       emit(GettingAllNotesFailed(error: "Error: $e"));
     }
   }
+
+  Future<void> updateNote(Note updatedNote) async {
+    try {
+      emit(UpdatingNote());
+      await noteRepository.updateNote(updatedNote);
+      emit(NoteUpdated());
+      getNotes();
+    } catch (e) {
+      emit(UpdatingNoteFailed(error: "Error: $e"));
+    }
+  }
 }

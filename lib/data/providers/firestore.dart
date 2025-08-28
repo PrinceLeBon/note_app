@@ -1,7 +1,8 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:logger/logger.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:logger/logger.dart';
 
 class FirestoreAPI {
   const FirestoreAPI();
@@ -36,6 +37,22 @@ class FirestoreAPI {
         .collection(collectionName)
         .doc(docId)
         .delete();
+  }
+
+  Future updateDocs(String collectionName, String docId,
+      Map<String, dynamic> data, String userId) async {
+    data["id"] = docId;
+
+    if (collectionName != "users") {
+      data["userId"] = userId;
+    }
+
+    await FirebaseFirestore.instance
+        .collection(collectionName)
+        .doc(docId)
+        .update(data)
+        .onError((error, stackTrace) =>
+            Logger().e("Error updating document: $error"));
   }
 
   Future<Reference> addFile(String folder, String name, File file) async {

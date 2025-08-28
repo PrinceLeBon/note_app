@@ -9,6 +9,7 @@ import '../../data/models/note.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_app/business_logic/cubit/notes/note_cubit.dart';
+import 'package:note_app/presentation/screens/edit_note.dart';
 
 class NoteCard extends StatelessWidget {
   final Note note;
@@ -22,7 +23,13 @@ class NoteCard extends StatelessWidget {
       child: Slidable(
         endActionPane: ActionPane(motion: const StretchMotion(), children: [
           SlidableAction(
-              onPressed: null,
+              onPressed: (context) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => EditNoteScreen(note: note),
+                  ),
+                );
+              },
               backgroundColor: Colors.grey.shade800,
               icon: Icons.edit,
               borderRadius: BorderRadius.circular(12)),
