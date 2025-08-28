@@ -42,4 +42,20 @@ class HashTag {
       'userId': userId,
     };
   }
+
+  HashTag copyWith({
+    String? id,
+    String? label,
+    String? color,
+    DateTime? creationDate,
+    String? userId,
+  }) {
+    return HashTag(
+      id: id ?? this.id,
+      label: label ?? this.label,
+      color: color ?? this.color,
+      creationDate: creationDate ?? this.creationDate,
+      userId: userId ?? this.userId,
+    );
+  }
 }

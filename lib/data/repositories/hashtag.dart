@@ -65,4 +65,78 @@ class HashTagRepository {
       rethrow;
     }
   }
+
+  Future updateHashTag(HashTag hashTag) async {
+    try {
+      final Box userBox = Hive.box("User");
+      UserModel user = userBox.get("user",
+          defaultValue: UserModel(
+              id: "id",
+              nom: "nom",
+              prenom: "prenom",
+              email: "email",
+              photo: "photo"));
+
+      await firestoreAPI.updateDocs(
+          "hashTags",
+          hashTag.id,
+          hashTag.toJson(),
+          (user.id == "id")
+              ? (FirebaseAuth.instance.currentUser?.uid)!
+              : user.id);
+
+      // Update local cache
+      final Box noteBox = Hive.box("Notes");
+      List<HashTag> hashTagsList =
+          List.castFrom(noteBox.get("hashTagsList", defaultValue: []))
+              .cast<HashTag>();
+      
+      int index = hashTagsList.indexWhere((tag) => tag.id == hashTag.id);
+      if (index != -1) {
+        hashTagsList[index] = hashTag;
+        noteBox.put("hashTagsList", hashTagsList);
+      }
+    } catch (e) {
+      Logger().e("HashTagRepository || Error while updateHashTag: $e");
+      rethrow;
+    }
+  }
+
+  Future deleteHashTag(String hashTagId) async {
+    try {
+      await firestoreAPI.deleteDocs("hashTags", hashTagId);
+
+      // Update local cache
+      final Box noteBox = Hive.box("Notes");
+      List<HashTag> hashTagsList =
+          List.castFrom(noteBox.get("hashTagsList", defaultValue: []))
+              .cast<HashTag>();
+      
+      hashTagsList.removeWhere((tag) => tag.id == hashTagId);
+      noteBox.put("hashTagsList", hashTagsList);
+    } catch (e) {
+      Logger().e("HashTagRepository || Error while deleteHashTag: $e");
+      rethrow;
+    }
+  }
+
+  int checkHashTagUsage(String hashTagId) {
+    try {
+      final Box noteBox = Hive.box("Notes");
+      List<dynamic> notesList =
+          noteBox.get("notesList", defaultValue: []);
+      
+      int usageCount = 0;
+      for (var note in notesList) {
+        if (note.hashtagsId.contains(hashTagId)) {
+          usageCount++;
+        }
+      }
+      
+      return usageCount;
+    } catch (e) {
+      Logger().e("HashTagRepository || Error while checkHashTagUsage: $e");
+      return 0;
+    }
+  }
 }

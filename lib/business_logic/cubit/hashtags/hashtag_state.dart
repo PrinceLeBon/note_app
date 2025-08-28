@@ -58,3 +58,22 @@ class DeletingHashTagFailed extends HashtagState {
 
   const DeletingHashTagFailed({required this.error});
 }
+
+class UpdatingHashTag extends HashtagState {}
+
+class HashTagUpdated extends HashtagState {}
+
+class UpdatingHashTagFailed extends HashtagState {
+  final String error;
+
+  const UpdatingHashTagFailed({required this.error});
+}
+
+class CheckingHashTagUsage extends HashtagState {}
+
+class HashTagInUse extends HashtagState {
+  final String message;
+  final int noteCount;
+
+  const HashTagInUse({required this.message, required this.noteCount});
+}

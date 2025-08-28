@@ -29,12 +29,25 @@ class HashtagCubit extends Cubit<HashtagState> {
     }
   }
 
-  void deleteHashTag(int index, List<HashTag> hashTagsList) {
+  Future<void> deleteHashTag(String hashTagId) async {
     try {
+      emit(CheckingHashTagUsage());
+      
+      // Check if hashtag is in use
+      int usageCount = hashTagRepository.checkHashTagUsage(hashTagId);
+      if (usageCount > 0) {
+        emit(HashTagInUse(
+          message: "Ce hashtag est utilisé dans $usageCount note(s). Vous ne pouvez pas le supprimer.",
+          noteCount: usageCount,
+        ));
+        // Return to previous state after 2 seconds
+        await Future.delayed(const Duration(seconds: 2));
+        getHashTags();
+        return;
+      }
+      
       emit(DeletingHashTag());
-      final Box noteBox = Hive.box("Notes");
-      hashTagsList.removeAt(index);
-      noteBox.put("hashTagsList", hashTagsList);
+      await hashTagRepository.deleteHashTag(hashTagId);
       emit(HashTagsDeleted());
       getHashTags();
     } catch (e) {
@@ -129,6 +142,17 @@ class HashtagCubit extends Cubit<HashtagState> {
       }
     } catch (e) {
       Logger().e("Error setting filtered hashtags: $e");
+    }
+  }
+
+  Future<void> updateHashTag(HashTag hashTag) async {
+    try {
+      emit(UpdatingHashTag());
+      await hashTagRepository.updateHashTag(hashTag);
+      emit(HashTagUpdated());
+      getHashTags();
+    } catch (e) {
+      emit(UpdatingHashTagFailed(error: "Error: $e"));
     }
   }
 }

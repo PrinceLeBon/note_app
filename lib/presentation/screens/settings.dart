@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_app/business_logic/cubit/theme/theme_cubit.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
+import 'hashtag_management.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -52,6 +53,37 @@ class SettingsPage extends StatelessWidget {
                 color: Theme.of(context).iconTheme.color,
               ),
               onTap: () => _showThemeDialog(context),
+            ),
+          ),
+          const SizedBox(height: 24),
+          _buildSectionHeader(context, "Organisation"),
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: ListTile(
+              leading: Icon(
+                Icons.tag,
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              title: const GoogleText(
+                text: "Gérer les hashtags",
+                fontSize: 16,
+              ),
+              subtitle: const GoogleText(
+                text: "Ajouter, modifier ou supprimer des hashtags",
+                fontSize: 14,
+              ),
+              trailing: Icon(
+                Icons.chevron_right,
+                color: Theme.of(context).iconTheme.color,
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HashtagManagementPage(),
+                  ),
+                );
+              },
             ),
           ),
           const SizedBox(height: 24),
