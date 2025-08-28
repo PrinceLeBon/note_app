@@ -3,38 +3,46 @@ name: Deploy Flutter Web
 on:
   push:
     branches:
-      - main  # À chaque push sur main, le workflow se déclenche
+      - main
+
+# This gives the action permissions to push to the repository.
+permissions:
+  contents: write
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Récupérer le code source
+      # 1️⃣ Checkout your repository's code
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2️⃣ Installer Flutter
+      # 2️⃣ Set up the Flutter SDK
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.3'  # Remplace par ta version stable
+          flutter-version: '3.29.3' # Consider using a more recent stable version if your project supports it.
+          channel: 'stable'
 
-      # 3️⃣ Installer les dépendances
+      # 3️⃣ Install your project's dependencies
       - name: Install dependencies
         run: flutter pub get
 
-      # 4️⃣ Build Flutter Web
+      # 4️⃣ Build the web application
       - name: Build web
         run: flutter build web --release
 
-      # 5️⃣ Déployer sur la branche web via GitHub Pages
+      # 5️⃣ Deploy the build folder to the 'web' branch
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@v3
         with:
+          # The token is automatically created by GitHub Actions.
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/web       # dossier à publier
-          publish_branch: web            # branche où le build sera publié
-          user_name: "github-actions[bot]"
-          user_email: "github-actions[bot]@users.noreply.github.com"
-          commit_message: "Automated web build from commit $GITHUB_SHA"
+          # This is the directory that the action will deploy.
+          publish_dir: ./build/web
+          # The branch to which the build artifacts will be pushed.
+          publish_branch: web
+          # A custom commit message.
+          commit_message: 'Deploy: ${{ github.event.head_commit.message }}'
+
