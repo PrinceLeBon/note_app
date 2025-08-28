@@ -3,49 +3,38 @@ name: Deploy Flutter Web
 on:
   push:
     branches:
-      - main
-
-permissions:
-  contents: write
+      - main  # À chaque push sur main, le workflow se déclenche
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout
+      # 1️⃣ Récupérer le code source
       - name: Checkout code
         uses: actions/checkout@v3
-      # Note: I removed 'persist-credentials: false' as it's not necessary here.
 
       # 2️⃣ Installer Flutter
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.29.3' # Consider using a more recent version if possible
+          flutter-version: '3.29.3'  # Remplace par ta version stable
 
       # 3️⃣ Installer les dépendances
       - name: Install dependencies
         run: flutter pub get
 
-      # 4️⃣ Build web
+      # 4️⃣ Build Flutter Web
       - name: Build web
         run: flutter build web --release
 
-      # 5️⃣ Déployer sur web (This part remains the same)
-      - name: Deploy to web branch
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout --orphan web
-          git rm -rf .
-          cp -r build/web/* .
-          # Add a .nojekyll file to prevent issues with files starting with _
-          touch .nojekyll
-          git add .
-          git commit -m "Automated web build from commit $GITHUB_SHA"
-          git push -f origin web
-
-      # 6️⃣ Retour sur main (This step is often not needed)
-      - name: Checkout back
-        run: git checkout main
+      # 5️⃣ Déployer sur la branche web via GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web       # dossier à publier
+          publish_branch: web            # branche où le build sera publié
+          user_name: "github-actions[bot]"
+          user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_message: "Automated web build from commit $GITHUB_SHA"
