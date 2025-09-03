@@ -10,6 +10,7 @@ import 'package:note_app/presentation/widgets/custom_drawer.dart';
 import 'package:note_app/presentation/widgets/custom_text_field.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
 import 'package:note_app/presentation/widgets/progress_indicator.dart';
+import 'package:note_app/presentation/widgets/sync_status_badge.dart';
 import '../../business_logic/cubit/notes/note_cubit.dart';
 import '../../utils/constants.dart';
 import '../widgets/custom_snack_bar.dart';
@@ -89,6 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 : GoogleText(text: "Hi, ${currentUser.prenom}"),
             elevation: 0,
             actions: [
+              const SyncStatusBadge(),
               IconButton(
                   onPressed: () {
                     setState(() {
