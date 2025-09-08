@@ -1,25 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/logger.dart';
 import 'package:note_app/business_logic/cubit/hashtags/hashtag_cubit.dart';
 import 'package:note_app/business_logic/cubit/notes/note_cubit.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
 import 'package:note_app/presentation/widgets/hashtags.dart';
 import 'package:note_app/presentation/widgets/note.dart';
 import 'package:note_app/presentation/widgets/progress_indicator.dart';
-import '../../data/models/note.dart';
+
 import '../../utils/constants.dart';
 import '../widgets/gap.dart';
 
-class FirstPage extends StatefulWidget {
+class FirstPage extends StatelessWidget {
   const FirstPage({super.key});
 
-  @override
-  State<FirstPage> createState() => _FirstPageState();
-}
-
-class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

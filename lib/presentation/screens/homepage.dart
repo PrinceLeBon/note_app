@@ -11,8 +11,8 @@ import 'package:note_app/presentation/widgets/custom_text_field.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
 import 'package:note_app/presentation/widgets/progress_indicator.dart';
 import 'package:note_app/presentation/widgets/sync_status_badge.dart';
+
 import '../../business_logic/cubit/notes/note_cubit.dart';
-import '../../utils/constants.dart';
 import '../widgets/custom_snack_bar.dart';
 import '../widgets/gap.dart';
 import 'connexion/login.dart';
@@ -71,7 +71,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         fit: BoxFit.cover,
                         width: 40,
                         height: 40,
-                        errorWidget: (context, url, error) => _buildDefaultAvatar(),
+                        errorWidget: (context, url, error) =>
+                            _buildDefaultAvatar(),
                       )
                     : _buildDefaultAvatar(),
               ),

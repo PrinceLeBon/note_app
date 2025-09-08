@@ -27,7 +27,7 @@ class NoteView extends StatelessWidget {
           },
         ),
         title: const GoogleText(
-          text: "Détail de la note",
+          text: "Détails de la note",
           fontWeight: true,
           fontSize: 18,
         ),
