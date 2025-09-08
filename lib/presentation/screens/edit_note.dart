@@ -68,20 +68,16 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
-          child: Icon(
-            Icons.arrow_back_ios_new,
-            color: whiteColor,
-          ),
+          child: const Icon(Icons.arrow_back_ios_new),
           onTap: () {
             context.read<HashtagCubit>().getHashTags();
             Navigator.of(context).pop();
           },
         ),
-        title: GoogleText(
+        title: const GoogleText(
           text: "Modifier la note",
           fontWeight: true,
           fontSize: 18,
-          color: whiteColor,
         ),
         actions: [
           BlocBuilder<HashtagCubit, HashtagState>(
@@ -112,10 +108,7 @@ class _EditNoteScreenState extends State<EditNoteScreen> {
                   }
                 },
                 hoverColor: Colors.transparent,
-                child: Icon(
-                  Icons.save,
-                  color: whiteColor,
-                ),
+                child: const Icon(Icons.save),
               );
             },
           ),

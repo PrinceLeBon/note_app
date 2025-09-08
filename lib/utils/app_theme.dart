@@ -62,8 +62,8 @@ class AppTheme {
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        fillColor: Colors.grey[200],
-        filled: true,
+        //fillColor: Colors.grey[200],
+        //filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide.none,
@@ -139,8 +139,8 @@ class AppTheme {
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
-        fillColor: Colors.grey[800],
-        filled: true,
+        //fillColor: Colors.grey[800],
+        //filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide.none,

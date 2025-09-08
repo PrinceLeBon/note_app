@@ -89,38 +89,6 @@ class _FirstPageState extends State<FirstPage> {
               },
             ),
             const Gap(horizontalAlign: false, gap: 10),
-            /*StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection("notes")
-                    .where("userId", isEqualTo: "0mmVDWRtSse1wxdjxQA8sTUfHyn1")
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CustomProgressIndicator();
-                  } else if (snapshot.hasData) {
-                    List<Note> result = snapshot.data?.docs
-                            .map((element) => Note.fromJson(element.data()))
-                            .toList() ??
-                        [];
-                    result.sort(
-                        (a, b) => b.creationDate.compareTo(a.creationDate));
-                    return (result.isNotEmpty)
-                        ? ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: result.length,
-                            itemBuilder: (context, index) {
-                              return NoteCard(
-                                note: result[index],
-                              );
-                            })
-                        : const Center(
-                            child: GoogleText(
-                                text: "Vous n'avez pas encore de notes"),
-                          );
-                  }
-                  return Container();
-                }),*/
             BlocBuilder<NoteCubit, NoteState>(
               builder: (context, state) {
                 if (state is NotesGotten) {

@@ -9,7 +9,6 @@ import 'package:note_app/presentation/widgets/hashtags.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/models/hashtag.dart';
-import '../../utils/constants.dart';
 import 'edit_note.dart';
 
 class NoteView extends StatelessWidget {
@@ -22,20 +21,19 @@ class NoteView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
-          child: Icon(
-            Icons.arrow_back_ios_new,
-            color: whiteColor,
-          ),
+          child: const Icon(Icons.arrow_back_ios_new),
           onTap: () {
             Navigator.of(context).pop();
           },
         ),
+        title: const GoogleText(
+          text: "Détail de la note",
+          fontWeight: true,
+          fontSize: 18,
+        ),
         actions: [
           IconButton(
-            icon: Icon(
-              Icons.edit,
-              color: whiteColor,
-            ),
+            icon: const Icon(Icons.edit),
             onPressed: () {
               Navigator.of(context)
                   .push(

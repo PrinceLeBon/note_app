@@ -11,6 +11,7 @@ import 'package:note_app/presentation/widgets/gap.dart';
 import 'package:note_app/presentation/widgets/google_text.dart';
 import 'package:note_app/presentation/widgets/show_hashtags.dart';
 import 'package:note_app/utils/constants.dart';
+
 import '../widgets/custom_dropdown.dart';
 import '../widgets/progress_indicator.dart';
 
@@ -34,20 +35,16 @@ class _NewNoteState extends State<NewNote> {
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
-          child: Icon(
-            Icons.arrow_back_ios_new,
-            color: whiteColor,
-          ),
+          child: const Icon(Icons.arrow_back_ios_new),
           onTap: () {
             context.read<HashtagCubit>().getHashTags();
             Navigator.of(context).pop();
           },
         ),
-        title: GoogleText(
+        title: const GoogleText(
           text: "Ajouter une note",
           fontWeight: true,
           fontSize: 18,
-          color: whiteColor,
         ),
         actions: [
           BlocBuilder<HashtagCubit, HashtagState>(
@@ -80,10 +77,7 @@ class _NewNoteState extends State<NewNote> {
                   }
                 },
                 hoverColor: Colors.transparent,
-                child: Icon(
-                  Icons.save,
-                  color: whiteColor,
-                ),
+                child: const Icon(Icons.save),
               );
             },
           ),
