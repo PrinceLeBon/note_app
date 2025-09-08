@@ -152,12 +152,20 @@ class _NewNoteState extends State<NewNote> {
                                               padding:
                                                   const EdgeInsets.all(4.0),
                                               decoration: BoxDecoration(
-                                                color: whiteColor,
+                                                color: Theme.of(context)
+                                                            .brightness ==
+                                                        Brightness.light
+                                                    ? Colors.blue
+                                                    : whiteColor,
                                                 shape: BoxShape.circle,
                                               ),
                                               child: Icon(
                                                 Icons.add,
-                                                color: blackColor,
+                                                color: Theme.of(context)
+                                                            .brightness ==
+                                                        Brightness.light
+                                                    ? Colors.white
+                                                    : blackColor,
                                                 size: 16.0,
                                               ),
                                             ),
@@ -173,7 +181,10 @@ class _NewNoteState extends State<NewNote> {
                                   )
                                 : (hashTagState is GettingAllHashNewTags)
                                     ? CircularProgressIndicator(
-                                        color: whiteColor,
+                                        color: Theme.of(context).brightness ==
+                                                Brightness.light
+                                            ? Colors.blue
+                                            : whiteColor,
                                       )
                                     : (hashTagState
                                             is GettingAllHashTagsNewFailed)
@@ -194,7 +205,11 @@ class _NewNoteState extends State<NewNote> {
                                                       .getHashTagsNew(),
                                                   icon: Icon(
                                                     Icons.download,
-                                                    color: whiteColor,
+                                                    color: Theme.of(context)
+                                                                .brightness ==
+                                                            Brightness.light
+                                                        ? Colors.blue
+                                                        : whiteColor,
                                                   ))
                                             ],
                                           )
@@ -226,11 +241,16 @@ class _NewNoteState extends State<NewNote> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            backgroundColor: blackColor,
-            title: const GoogleText(
+            backgroundColor: Theme.of(context).brightness == Brightness.light
+                ? Colors.white
+                : blackColor,
+            title: GoogleText(
               text: "Ajouter un hashtag",
               fontWeight: true,
               fontSize: 20,
+              color: Theme.of(context).brightness == Brightness.light
+                  ? Colors.black87
+                  : null, // Use default color in dark mode
             ),
             content: SingleChildScrollView(
               child: Column(
@@ -251,10 +271,13 @@ class _NewNoteState extends State<NewNote> {
                       },
                     ),
                   ),
-                  const GoogleText(
+                  GoogleText(
                     text: "Choisissez une couleur !",
                     fontWeight: true,
                     fontSize: 15,
+                    color: Theme.of(context).brightness == Brightness.light
+                        ? Colors.black87
+                        : null, // Use default color in dark mode
                   ),
                   const Gap(horizontalAlign: false, gap: 10),
                   MaterialPicker(
@@ -267,8 +290,10 @@ class _NewNoteState extends State<NewNote> {
             actions: <Widget>[
               ElevatedButton(
                 style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.all<Color>(blackColor)),
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                        Theme.of(context).brightness == Brightness.light
+                            ? Colors.blue
+                            : blackColor)),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     setState(() => currentColor = pickerColor);

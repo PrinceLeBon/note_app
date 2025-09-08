@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../utils/constants.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -27,7 +28,9 @@ class CustomTextField extends StatelessWidget {
       validator: validator,
       keyboardType: TextInputType.multiline,
       maxLines: (password) ? 1 : null,
-      cursorColor: whiteColor,
+      cursorColor: Theme.of(context).brightness == Brightness.light
+          ? Colors.black87
+          : whiteColor,
       controller: controller,
       minLines: 1,
       obscureText: password,
@@ -35,7 +38,9 @@ class CustomTextField extends StatelessWidget {
       style: GoogleFonts.poppins(
         fontWeight: FontWeight.w400,
         fontSize: size,
-        color: whiteColor,
+        color: Theme.of(context).brightness == Brightness.light
+            ? Colors.black87
+            : whiteColor,
       ),
       onChanged: onChanged,
       decoration: InputDecoration(
